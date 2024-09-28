@@ -134,6 +134,9 @@ return {
           capabilities = capabilities,
         }
       end,
+      ["asm_lsp"] = function()
+        lspconfig["asm_lsp"].setup {}
+      end,
       ["bashls"] = function()
         lspconfig["bashls"].setup {}
       end,
