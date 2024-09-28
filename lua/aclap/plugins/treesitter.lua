@@ -45,6 +45,8 @@ return {
         "make",
         "python",
         "rst",
+        "rust",
+        "ron",
         "zig",
       },
       incremental_selection = {

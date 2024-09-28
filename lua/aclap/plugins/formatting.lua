@@ -16,6 +16,7 @@ return {
         c = { "clang-format" },
         cpp = { "clang-format" },
         cmake = { "cmakelang" },
+        rust = { "rustfmt" },
       },
       format_on_save = {
         lsp_fallback = true,
