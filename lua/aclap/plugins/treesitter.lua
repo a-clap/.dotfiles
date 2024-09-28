@@ -45,6 +45,7 @@ return {
         "make",
         "python",
         "rst",
+        "zig",
       },
       incremental_selection = {
         enable = true,
