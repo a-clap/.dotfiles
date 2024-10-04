@@ -42,6 +42,7 @@ return {
       mason_tool_installer.setup {
         ensure_installed = {
           "asmfmt",
+          "bacon",
           "stylua", -- lua formatter
           "isort", -- python formatter
           "black", -- python formatter
