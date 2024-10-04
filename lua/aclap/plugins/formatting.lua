@@ -8,7 +8,6 @@ return {
       formatters_by_ft = {
         asm = { "asmfmt" },
         json = { "prettier" },
-        yaml = { "prettier" },
         markdown = { "prettier" },
         lua = { "stylua" },
         python = { "isort", "black" },
@@ -17,6 +16,7 @@ return {
         cpp = { "clang-format" },
         cmake = { "cmakelang" },
         rust = { "rustfmt" },
+        yaml = { "yamlfmt" },
       },
       format_on_save = {
         lsp_fallback = true,

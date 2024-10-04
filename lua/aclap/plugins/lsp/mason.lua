@@ -34,6 +34,7 @@ return {
           "gopls",
           "prismals",
           "pyright",
+          "yamlls",
           "zls",
         },
       }
@@ -50,6 +51,8 @@ return {
           "codelldb",
           "oelint-adv",
           "cmakelint",
+          "yamlfmt",
+          "yamllint",
         },
       }
     end,
