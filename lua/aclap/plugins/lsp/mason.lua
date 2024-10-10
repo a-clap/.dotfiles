@@ -30,6 +30,7 @@ return {
         ensure_installed = {
           "asm_lsp",
           "bashls",
+          "dockerls",
           "cmake",
           "gopls",
           "prismals",
@@ -50,6 +51,7 @@ return {
           "pylint",
           "shfmt",
           "codelldb",
+          "hadolint",
           "oelint-adv",
           "cmakelint",
           "yamlfmt",
