@@ -40,10 +40,29 @@ return {
     end,
     {
       "leoluz/nvim-dap-go",
+      event = "VeryLazy",
       ft = "go",
-      dependencies = "mfussenegger/nvim-dap",
+      dependencies = {
+        "mfussenegger/nvim-dap",
+        "rcarriga/nvim-dap-ui",
+        "nvim-neotest/nvim-nio",
+      },
       config = function(_, opts)
         require("dap-go").setup(opts)
+      end,
+    },
+    {
+      "mfussenegger/nvim-dap-python",
+      event = "VeryLazy",
+      ft = "python",
+      dependencies = {
+        "mfussenegger/nvim-dap",
+        "rcarriga/nvim-dap-ui",
+        "nvim-neotest/nvim-nio",
+      },
+      config = function(_, opts)
+        local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
+        require("dap-python").setup(path)
       end,
     },
   },

@@ -136,9 +136,23 @@ return {
           capabilities = capabilities,
         }
       end,
+      ["pyright"] = function()
+        lspconfig["pyright"].setup {
+          capabilities = capabilities,
+          settings = {
+            pyright = {
+              disableOrganizeImports = true,
+            },
+            python = {
+              analysis = {
+                ignore = { "*" },
+              },
+            },
+          },
+        }
+      end,
       ["gopls"] = function()
         lspconfig["gopls"].setup {
-          on_attach = on_attach,
           capabilities = capabilities,
           filetypes = { "go", "gomod", "gowork", "gotmpl" },
           settings = {

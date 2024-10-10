@@ -48,7 +48,9 @@ return {
           "isort", -- python formatter
           "black", -- python formatter
           "prettier",
-          "pylint",
+          "mypy",
+          "debugpy",
+          "ruff",
           "shfmt",
           "codelldb",
           "hadolint",
