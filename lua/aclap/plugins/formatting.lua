@@ -17,6 +17,7 @@ return {
         cmake = { "cmakelang" },
         rust = { "rustfmt" },
         yaml = { "yamlfmt" },
+        go = { "gofumpt", "golines", "goimports-reviser" },
       },
       format_on_save = {
         lsp_fallback = true,

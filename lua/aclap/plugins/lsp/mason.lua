@@ -54,6 +54,11 @@ return {
           "cmakelint",
           "yamlfmt",
           "yamllint",
+          "golangci-lint",
+          "gofumpt",
+          "golines",
+          "goimports-reviser",
+          "go-debug-adapter",
         },
       }
     end,

@@ -136,11 +136,21 @@ return {
           capabilities = capabilities,
         }
       end,
-      ["asm_lsp"] = function()
-        lspconfig["asm_lsp"].setup {}
-      end,
-      ["bashls"] = function()
-        lspconfig["bashls"].setup {}
+      ["gopls"] = function()
+        lspconfig["gopls"].setup {
+          on_attach = on_attach,
+          capabilities = capabilities,
+          filetypes = { "go", "gomod", "gowork", "gotmpl" },
+          settings = {
+            gopls = {
+              completeUnimported = true,
+              usePlaceholders = true,
+              analyses = {
+                unusedParams = true,
+              },
+            },
+          },
+        }
       end,
       ["lua_ls"] = function()
         -- configure lua server (with special settings)
