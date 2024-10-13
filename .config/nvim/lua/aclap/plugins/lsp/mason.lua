@@ -50,7 +50,7 @@ return {
           "prettier",
           "mypy",
           "debugpy",
-          "ruff",
+          -- "ruff",
           "shfmt",
           "codelldb",
           "hadolint",
