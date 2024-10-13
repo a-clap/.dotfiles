@@ -90,7 +90,6 @@ nmap <leader>tn :action NextTab<CR>
 " Przesuwanie pomiędzy oknami
 nmap <C-l> :action TabShiftActions.MoveFocusRight<CR>
 nmap <C-h> :action TabShiftActions.MoveFocusLeft<CR>
-nmap <C-k> :action TabShiftActions.MoveFocusUp<CR>
 nmap <C-j> :action TabShiftActions.MoveFocusDown<CR>
 nmap <leader>. :action NextSplitter<CR>
 
@@ -107,8 +106,6 @@ nmap <leader>j :action TabShiftActions.StretchDown<CR>
 nmap <leader>k :action TabShiftActions.StretchUp<CR>
 
 
-inoremap <C-j> :action EditorDown<CR>
-inoremap <C-k> :action EditorUp<CR>
 
 nmap J :action EditorCloneCaretBelow<CR>
 nmap K :action EditorCloneCaretAbove<CR>
