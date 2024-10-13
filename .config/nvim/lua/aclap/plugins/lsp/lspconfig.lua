@@ -136,6 +136,22 @@ return {
           capabilities = capabilities,
         }
       end,
+      ["pyright"] = function()
+        lspconfig["pyright"].setup {
+          capabilities = capabilities,
+          settings = {
+            pyright = {
+              disableOrganizeImports = true, -- Using Ruff
+            },
+            python = {
+              analysis = {
+                ignore = { "*" }, -- Using Ruff
+                typeCheckingMode = "off", -- Using mypy
+              },
+            },
+          },
+        }
+      end,
       ["gopls"] = function()
         lspconfig["gopls"].setup {
           capabilities = capabilities,

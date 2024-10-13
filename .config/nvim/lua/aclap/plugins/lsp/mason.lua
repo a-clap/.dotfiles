@@ -49,8 +49,9 @@ return {
           "black", -- python formatter
           "prettier",
           "mypy",
+          "flake8",
           "debugpy",
-          -- "ruff",
+          "ruff",
           "shfmt",
           "codelldb",
           "hadolint",
