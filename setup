@@ -1,0 +1,42 @@
+#!/bin/bash
+
+set -e
+
+export DEBIAN_FRONTEND=noninteractive
+echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
+
+sudo apt-get update && sudo apt-get install --no-install-recommends -y \
+    build-essential \
+    python3 \
+    python3-venv \
+    python3-pip \
+    stow
+
+# Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- --quiet -y --profile default
+echo "Rust installed!"
+
+# Golang
+curl -fsSL https://go.dev/dl/go1.23.2.linux-amd64.tar.gz -o go1.23.2.linux-amd64.tar.gz
+chmod a+x go1.23.2.linux-amd64.tar.gz
+sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.23.2.linux-amd64.tar.gz
+echo "Golang installed!"
+
+/usr/local/go/bin/go install github.com/jesseduffield/lazygit@latest
+
+# Node
+curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh
+sudo -E bash nodesource_setup.sh
+sudo apt-get install -y nodejs
+
+# Set up pure prompt
+mkdir -p "$HOME/.zsh"
+git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
+
+# Environment
+sudo cp env.sh /etc/profile.d/env.sh && sudo chmod a+x /etc/profile.d/env.sh
+
+# Create symlinks
+stow .
+
+exit 0
