@@ -36,6 +36,7 @@ return {
           "prismals",
           "pyright",
           "yamlls",
+          "jsonls",
           "zls",
         },
       }
@@ -64,6 +65,7 @@ return {
           "golines",
           "goimports-reviser",
           "go-debug-adapter",
+          "jsonlint",
         },
       }
     end,
