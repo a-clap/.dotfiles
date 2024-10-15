@@ -113,8 +113,6 @@ return {
 
         -- inlay hints
         vim.lsp.inlay_hint.enable(true, { 0 })
-        -- signature helper
-        require("lsp_signature").on_attach({}, ev.buf)
       end,
     })
 
