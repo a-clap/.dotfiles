@@ -54,7 +54,9 @@ return {
     -- import lspconfig plugin
     local lspconfig = require "lspconfig"
 
-    lspconfig.clangd.setup {}
+    lspconfig.clangd.setup {
+      filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+    }
 
     -- import mason_lspconfig plugin
     local mason_lspconfig = require "mason-lspconfig"
