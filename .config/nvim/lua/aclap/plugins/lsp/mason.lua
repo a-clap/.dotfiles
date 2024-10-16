@@ -38,6 +38,7 @@ return {
           "yamlls",
           "jsonls",
           "zls",
+          "bufls",
         },
       }
 
@@ -66,6 +67,7 @@ return {
           "goimports-reviser",
           "go-debug-adapter",
           "jsonlint",
+          "buf",
         },
       }
     end,

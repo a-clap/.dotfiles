@@ -10,7 +10,7 @@ return {
       shell = { "shellcheck" },
       cmake = { "cmakelint" },
       python = { "pyright", "mypy", "ruff" },
-      protobuf = { "buf_lint" },
+      proto = { "buf_lint" },
     }
 
     local clangtidy = lint.linters.clangtidy

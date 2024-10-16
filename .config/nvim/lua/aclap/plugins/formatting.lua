@@ -18,6 +18,7 @@ return {
         rust = { "rustfmt" },
         yaml = { "yamlfmt" },
         go = { "gofumpt", "golines", "goimports-reviser" },
+        proto = { "buf" },
       },
       format_on_save = {
         lsp_fallback = true,
