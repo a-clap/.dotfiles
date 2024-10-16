@@ -9,7 +9,7 @@ return {
       cpp = { "clangtidy" },
       shell = { "shellcheck" },
       cmake = { "cmakelint" },
-      python = { "pyright", "mypy", "ruff" },
+      python = { "mypy", "ruff" },
       proto = { "buf_lint" },
     }
 
