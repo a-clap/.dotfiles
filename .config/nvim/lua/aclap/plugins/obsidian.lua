@@ -9,11 +9,9 @@ return {
   {
     "epwalsh/obsidian.nvim",
     version = "*", -- recommended, use latest release instead of latest commit
-    lazy = true,
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
-    ft = "markdown",
 
     opts = {
       workspaces = {
@@ -41,6 +39,9 @@ return {
       ui = {
         enable = false,
       },
+    },
+    keys = {
+      { "<leader>ot", "<cmd>ObsidianTemplate note<cr> <cmd>lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>", desc = "Create template" },
     },
   },
   {
