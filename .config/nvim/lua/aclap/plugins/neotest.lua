@@ -11,6 +11,7 @@ return {
     },
     config = function()
       require("neotest").setup {
+        -- default_strategy = "dap",
         status = { virtual_text = true },
         adapters = {
           require "neotest-python" {
@@ -20,18 +21,8 @@ return {
           },
           require "neotest-golang" {},
         },
-        status = {
-          enabled = true,
-          signs = true,
-          virtual_text = true,
-        },
         output = {
-          enabled = true,
-          open_on_run = "short",
-        },
-        output_panel = {
-          enabled = true,
-          open = "botright split | resize 15",
+          open_on_run = true,
         },
       }
     end,

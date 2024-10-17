@@ -6,10 +6,10 @@ return {
   config = function()
     local keymap = vim.keymap -- for conciseness
 
-    keymap.set("n", "<C-A-r>", "<cmd>CMakeGenerate!<CR>", { desc = "CMake Generate" })
-    keymap.set("n", "<C-A-b>", "<cmd>CMakeBuild<CR>", { desc = "CMake Build" })
-    keymap.set("n", "<C-A-p>", "<cmd>CMakeSelectConfigurePreset<CR>", { desc = "CMake select configure preset" })
-    keymap.set("n", "<C-a-c>", "<cmd>CMakeClean<CR>", { desc = "CMake clean" })
+    keymap.set("n", "<leader>cg", "<cmd>CMakeGenerate<CR>", { desc = "CMake Generate" })
+    keymap.set("n", "<leader>cb", "<cmd>CMakeBuild<CR>", { desc = "CMake Build" })
+    keymap.set("n", "<leader>cp", "<cmd>CMakeSelectConfigurePreset<CR>", { desc = "CMake select configure preset" })
+    keymap.set("n", "<leader>cc", "<cmd>CMakeClean<CR>", { desc = "CMake clean" })
     keymap.set("n", "<leader>cd", "<cmd>CMakeDebugCurrentFile<CR>", { desc = "CMake debug current file" })
     keymap.set("n", "<leader>cr", "<cmd>CMakeRunCurrentFile<CR>", { desc = "CMake run current file" })
 
@@ -23,6 +23,9 @@ return {
       cmake_soft_link_compile_commands = true, -- this will automatically make a soft link from compile commands file to project root dir
       cmake_compile_commands_from_lsp = false, -- this will automatically set compile commands file location using lsp, to use it, please set `cmake_soft_link_compile_commands` to false
       cmake_kits_path = nil, -- this is used to specify global cmake kits path, see CMakeKits for detailed usage
+      cmake_build_directory = function()
+        return "build/${variant:buildType}"
+      end,
       cmake_dap_configuration = { -- debug settings for cmake
         name = "cpp",
         type = "codelldb",
