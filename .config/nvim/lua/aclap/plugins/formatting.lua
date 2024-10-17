@@ -19,6 +19,7 @@ return {
         yaml = { "yamlfmt" },
         go = { "gofumpt", "golines", "goimports-reviser" },
         proto = { "buf" },
+        xml = { "xmlformat" },
       },
       format_on_save = {
         lsp_fallback = true,

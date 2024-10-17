@@ -39,6 +39,7 @@ return {
           "jsonls",
           "zls",
           "bufls",
+          "lemminx",
         },
       }
 
@@ -68,6 +69,7 @@ return {
           "go-debug-adapter",
           "jsonlint",
           "buf",
+          "xmlformatter",
         },
       }
     end,
