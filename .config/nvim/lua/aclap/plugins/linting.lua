@@ -11,6 +11,8 @@ return {
       cmake = { "cmakelint" },
       python = { "mypy", "ruff" },
       proto = { "buf_lint" },
+      lua = { "luacheck" },
+      docker = { "hadolint" },
     }
 
     local clangtidy = lint.linters.clangtidy

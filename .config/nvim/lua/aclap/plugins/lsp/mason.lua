@@ -40,6 +40,7 @@ return {
           "zls",
           "bufls",
           "lemminx",
+          "lua_ls",
         },
       }
 
@@ -70,6 +71,7 @@ return {
           "jsonlint",
           "buf",
           "xmlformatter",
+          "luacheck",
         },
       }
     end,

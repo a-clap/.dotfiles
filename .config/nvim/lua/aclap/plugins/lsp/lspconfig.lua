@@ -111,7 +111,7 @@ return {
         keymap.set("n", "K", vim.lsp.buf.hover, opts)
 
         opts.desc = "Signature Documentation"
-        keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+        keymap.set("n", "<C-q>", vim.lsp.buf.signature_help, opts)
 
         opts.desc = "Restart LSP"
         keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
