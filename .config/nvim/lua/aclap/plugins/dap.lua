@@ -16,7 +16,6 @@ return {
       vim.api.nvim_set_keymap("n", "<F11>", ":DapStepInto<CR>", { noremap = true })
       vim.api.nvim_set_keymap("n", "<F12>", ":DapStepOut<CR>", { noremap = true })
       vim.api.nvim_set_keymap("n", "<leader>dr", ":lua require('dapui').open({reset = true})<CR>", { noremap = true })
-      -- vim.api.nvim_set_keymap("n", "<leader>ht", ":lua require('harpoon.ui').toggle_quick_menu()<CR>", { noremap = true })
     end,
   },
   {
