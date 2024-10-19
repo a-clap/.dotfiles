@@ -10,6 +10,7 @@ return {
     keymap.set("n", "<leader>cb", "<cmd>CMakeBuild<CR>", { desc = "CMake Build" })
     keymap.set("n", "<leader>cp", "<cmd>CMakeSelectConfigurePreset<CR>", { desc = "CMake select configure preset" })
     keymap.set("n", "<leader>cc", "<cmd>CMakeClean<CR>", { desc = "CMake clean" })
+    keymap.set("n", "<leader>ct", "<cmd>CMakeRunTest<CR>", { desc = "CMake clean" })
     keymap.set("n", "<leader>cd", "<cmd>CMakeDebugCurrentFile<CR>", { desc = "CMake debug current file" })
     keymap.set("n", "<leader>cr", "<cmd>CMakeRunCurrentFile<CR>", { desc = "CMake run current file" })
 

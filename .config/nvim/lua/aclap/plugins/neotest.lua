@@ -8,6 +8,7 @@ return {
       "antoinemadec/FixCursorHold.nvim",
       "nvim-neotest/neotest-python",
       "fredrikaverpil/neotest-golang",
+      "alfaix/neotest-gtest",
     },
     config = function()
       require("neotest").setup {
@@ -19,7 +20,8 @@ return {
             dap = { justMyCode = false },
             pytest_discover_instances = true,
           },
-          require "neotest-golang" {},
+          require "neotest-golang",
+          require("neotest-gtest").setup {},
         },
         output = {
           open_on_run = true,
