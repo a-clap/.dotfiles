@@ -2,6 +2,7 @@ return {
   "mrcjkb/rustaceanvim",
   version = "^5", -- Recommended
   lazy = true,
+  ft = "rust",
 
   config = function()
     local keymap = vim.keymap
