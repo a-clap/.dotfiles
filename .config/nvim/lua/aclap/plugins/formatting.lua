@@ -14,7 +14,6 @@ return {
         bash = { "shfmt" },
         c = { "clang-format" },
         cpp = { "clang-format" },
-        cmake = { "cmakelang" },
         rust = { "rustfmt" },
         yaml = { "yamlfmt" },
         go = { "gofumpt", "golines", "goimports-reviser" },
