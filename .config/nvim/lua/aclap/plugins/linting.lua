@@ -5,8 +5,6 @@ return {
     local lint = require "lint"
 
     lint.linters_by_ft = {
-      c = { "clangtidy" },
-      cpp = { "clangtidy" },
       shell = { "shellcheck" },
       cmake = { "cmakelint" },
       python = { "mypy", "ruff" },
