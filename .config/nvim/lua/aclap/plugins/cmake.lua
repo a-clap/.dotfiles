@@ -3,8 +3,6 @@ return {
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
-  lazy = true,
-  ft = { "cpp", "c", "cmake" },
   config = function()
     local keymap = vim.keymap -- for conciseness
 
