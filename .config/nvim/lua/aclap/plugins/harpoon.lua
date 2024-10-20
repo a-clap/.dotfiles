@@ -28,16 +28,14 @@ return {
 
     vim.keymap.set("n", "<leader>fh", function()
       toggle_telescope(harpoon:list())
-    end, { desc = "Open harpoon window" })
-
-    vim.keymap.set("n", "<leader>ht", ":lua require('harpoon.ui').toggle_quick_menu()<CR>", { noremap = true, desc = "[H]arpoon toggle menu" })
+    end, { desc = "[F]ind in [H]arpoon" })
 
     vim.keymap.set("n", "<leader>ha", function()
       harpoon:list():add()
-    end)
+    end, { desc = "[H]arpoon [a]dd" })
 
     vim.keymap.set("n", "<leader>ht", function()
       harpoon.ui:toggle_quick_menu(harpoon:list())
-    end)
+    end, { noremap = true, desc = "[H]arpoon [t]oggle menu" })
   end,
 }
