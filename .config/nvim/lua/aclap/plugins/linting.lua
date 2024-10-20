@@ -13,6 +13,7 @@ return {
       proto = { "buf_lint" },
       lua = { "luacheck" },
       docker = { "hadolint" },
+      bitbake = { "oelint-adv" },
     }
 
     local clangtidy = lint.linters.clangtidy
