@@ -6,58 +6,10 @@ return {
     { "antosha417/nvim-lsp-file-operations", config = true },
     { "folke/neodev.nvim", opts = {} },
   },
-  opts = {
-    servers = {
-      clangd = {
-        keys = {
-          { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
-        },
-        root_dir = function(fname)
-          return require("lspconfig.util").root_pattern(
-            "Makefile",
-            "configure.ac",
-            "configure.in",
-            "config.h.in",
-            "meson.build",
-            "meson_options.txt",
-            "build.ninja"
-          )(fname) or require("lspconfig.util").root_pattern("compile_commands.json", "compile_flags.txt")(fname) or require("lspconfig.util").find_git_ancestor(
-            fname
-          )
-        end,
-        capabilities = {
-          offsetEncoding = { "utf-16" },
-        },
-        cmd = {
-          "clangd",
-          "--background-index",
-          "--clang-tidy",
-          "--header-insertion=iwyu",
-          "--completion-style=detailed",
-          "--function-arg-placeholders",
-        },
-        init_options = {
-          usePlaceholders = true,
-          completeUnimported = true,
-          clangdFileStatus = true,
-        },
-      },
-    },
-    setup = {
-      clangd = function(_, opts)
-        local clangd_ext_opts = LazyVim.opts "clangd_extensions.nvim"
-        require("clangd_extensions").setup(vim.tbl_deep_extend("force", clangd_ext_opts or {}, { server = opts }))
-        return false
-      end,
-    },
-  },
+
   config = function()
     -- import lspconfig plugin
     local lspconfig = require "lspconfig"
-
-    lspconfig.clangd.setup {
-      filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
-    }
 
     -- import mason_lspconfig plugin
     local mason_lspconfig = require "mason-lspconfig"
@@ -169,6 +121,7 @@ return {
       end,
       ["lua_ls"] = function()
         -- configure lua server (with special settings)
+        print "Hello luia"
         lspconfig["lua_ls"].setup {
           capabilities = capabilities,
           settings = {
@@ -183,6 +136,52 @@ return {
             },
           },
         }
+      end,
+    }
+
+    lspconfig.clangd.setup {
+      filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+      root_dir = function(fname)
+        return require("lspconfig.util").root_pattern(
+          "Makefile",
+          "configure.ac",
+          "configure.in",
+          "config.h.in",
+          "meson.build",
+          "meson_options.txt",
+          "build.ninja"
+        )(fname) or require("lspconfig.util").root_pattern("compile_commands.json", "compile_flags.txt")(fname) or require("lspconfig.util").find_git_ancestor(
+          fname
+        )
+      end,
+      capabilities = (function()
+        capabilities.offsetEncoding = { "utf-16" }
+        return capabilities
+      end)(),
+
+      cmd = {
+        "clangd",
+        "--background-index",
+        "--clang-tidy",
+        "--header-insertion=iwyu",
+        "--completion-style=detailed",
+        "--function-arg-placeholders=1",
+        "--malloc-trim",
+        "--j=4",
+        "--pch-storage=memory",
+      },
+      init_options = {
+        usePlaceholders = true,
+        completeUnimported = true,
+        clangdFileStatus = true,
+      },
+      single_file_support = true,
+      on_attach = function()
+        vim.keymap.set("n", "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", { desc = "Switch Source/Header (C/C++)" })
+
+        vim.lsp.inlay_hint.enable(false, { 0 })
+        require("clangd_extensions.inlay_hints").setup_autocmd()
+        require("clangd_extensions.inlay_hints").set_inlay_hints()
       end,
     }
   end,
