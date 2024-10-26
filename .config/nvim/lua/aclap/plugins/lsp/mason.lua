@@ -48,7 +48,7 @@ return {
         ensure_installed = {
           "asmfmt",
           "bacon",
-          "black", -- python formatter
+          "black",
           "buf",
           "cmakelint",
           "codelldb",
@@ -60,7 +60,7 @@ return {
           "golangci-lint",
           "golines",
           "hadolint",
-          "isort", -- python formatter
+          "isort",
           "jsonlint",
           "luacheck",
           "mypy",
@@ -68,7 +68,7 @@ return {
           "prettier",
           "ruff",
           "shfmt",
-          "stylua", -- lua formatter
+          "stylua",
           "xmlformatter",
           "yamlfmt",
           "yamllint",
