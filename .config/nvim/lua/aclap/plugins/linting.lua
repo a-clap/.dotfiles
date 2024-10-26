@@ -5,13 +5,13 @@ return {
     local lint = require "lint"
 
     lint.linters_by_ft = {
-      shell = { "shellcheck" },
-      cmake = { "cmakelint" },
-      python = { "mypy", "ruff" },
-      proto = { "buf_lint" },
-      lua = { "luacheck" },
-      docker = { "hadolint" },
       bitbake = { "oelint-adv" },
+      cmake = { "cmakelint" },
+      docker = { "hadolint" },
+      lua = { "luacheck" },
+      proto = { "buf_lint" },
+      python = { "mypy", "ruff" },
+      shell = { "shellcheck" },
     }
 
     local clangtidy = lint.linters.clangtidy
