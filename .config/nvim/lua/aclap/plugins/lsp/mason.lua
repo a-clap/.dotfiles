@@ -50,6 +50,7 @@ return {
           "bacon",
           "black",
           "buf",
+          "checkmake",
           "cmakelint",
           "codelldb",
           "debugpy",

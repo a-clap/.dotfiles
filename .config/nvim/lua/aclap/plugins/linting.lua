@@ -6,6 +6,7 @@ return {
 
     lint.linters_by_ft = {
       bitbake = { "oelint-adv" },
+      make = { "checkmake" },
       cmake = { "cmakelint" },
       docker = { "hadolint" },
       lua = { "luacheck" },
