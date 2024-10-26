@@ -32,3 +32,7 @@ opt.clipboard:append "unnamedplus"
 -- split
 opt.splitright = true
 opt.splitbelow = true
+
+-- spellcheck
+opt.spelllang = "en_us,pl"
+opt.spell = true
