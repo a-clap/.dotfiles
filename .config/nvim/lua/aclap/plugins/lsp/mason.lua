@@ -32,6 +32,7 @@ return {
           "bashls",
           "bufls",
           "cmake",
+          "clangd",
           "dockerls",
           "gopls",
           "jsonls",
