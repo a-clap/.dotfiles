@@ -2,7 +2,10 @@ return {
   {
     "MeanderingProgrammer/markdown.nvim",
     main = "render-markdown",
-    opts = {},
+    opts = {
+      file_types = { "markdown" },
+    },
+    ft = { "markdown" },
     name = "render-markdown", -- Only needed if you have another plugin named markdown.nvim
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you use the mini.nvim suite
   },
@@ -12,6 +15,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
+    ft = { "markdown" },
 
     opts = {
       workspaces = {
@@ -31,13 +35,12 @@ return {
       },
       -- Optional, completion of wiki links, local markdown links, and tags using nvim-cmp.
       completion = {
-        -- Set to false to disable completion.
         nvim_cmp = true,
-        -- Trigger completion at 2 chars.
         min_chars = 2,
       },
       ui = {
-        enable = false,
+        checkboxes = {},
+        bullets = {},
       },
     },
     keys = {
