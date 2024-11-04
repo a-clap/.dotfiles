@@ -63,7 +63,6 @@ return {
         opts.desc = "Show documentation for what is under cursor"
         keymap.set("n", "<C-q>", vim.lsp.buf.hover, opts)
 
-
         opts.desc = "Restart LSP"
         keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
 
@@ -119,7 +118,6 @@ return {
       end,
       ["lua_ls"] = function()
         -- configure lua server (with special settings)
-        print "Hello luia"
         lspconfig["lua_ls"].setup {
           capabilities = capabilities,
           settings = {
