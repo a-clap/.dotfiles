@@ -54,6 +54,7 @@ return {
           "checkmake",
           "cmakelint",
           "codelldb",
+          "cppdbg",
           "debugpy",
           "flake8",
           "go-debug-adapter",
@@ -85,8 +86,48 @@ return {
       "williamboman/mason.nvim",
       "mfussenegger/nvim-dap",
     },
-    opts = {
-      handlers = {},
-    },
+    config = function()
+      require("mason-nvim-dap").setup {
+        ensure_installed = { "codelldb", "cppdbg" },
+        automatic_installation = true,
+        handlers = {
+          function(config)
+            -- all sources with no handler get passed here
+            -- Keep original functionality
+            require("mason-nvim-dap").default_setup(config)
+          end,
+          cppdbg = function(config)
+            config.configurations = {
+              {
+                name = "Launch file",
+                type = "cppdbg",
+                request = "launch",
+                program = function()
+                  return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+                end,
+                cwd = "${workspaceFolder}",
+                stopAtEntry = true,
+              },
+              {
+                name = "gdbserver",
+                type = "cppdbg",
+                request = "launch",
+                MIMode = "gdb",
+                miDebuggerServerAddress = function()
+                  return vim.fn.input("ip address:", "192.168.1.1:1234")
+                end,
+
+                miDebuggerPath = vim.fn.exepath "gdb",
+                cwd = "${workspaceFolder}",
+                program = function()
+                  return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+                end,
+              },
+            }
+            require("mason-nvim-dap").default_setup(config) -- don't forget this!
+          end,
+        },
+      }
+    end,
   },
 }
