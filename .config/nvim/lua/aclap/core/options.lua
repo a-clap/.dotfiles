@@ -36,5 +36,3 @@ opt.splitbelow = true
 -- spellcheck
 opt.spelllang = "en_us,pl"
 opt.spell = true
-
-vim.o.conceallevel = 2 -- set conceal level for obsidian plugin
