@@ -27,6 +27,10 @@ return {
       },
     }
 
+    conform.formatters.yamlfmt = {
+      prepend_args = { "-formatter", "retain_line_breaks_single=true" },
+    }
+
     vim.keymap.set({ "n", "v" }, "<leader>mp", function()
       conform.format {
         lsp_fallback = true,
