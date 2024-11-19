@@ -52,6 +52,7 @@ return {
           "black",
           "buf",
           "checkmake",
+          "clang-format",
           "cmakelint",
           "codelldb",
           "cppdbg",
