@@ -11,7 +11,7 @@ return {
         markdown = { "prettier" },
         lua = { "stylua" },
         python = { "isort", "black" },
-        bash = { "shfmt" },
+        sh = { "shfmt" },
         c = { "clang-format" },
         cpp = { "clang-format" },
         rust = { "rustfmt" },
