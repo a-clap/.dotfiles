@@ -71,6 +71,7 @@ return {
           "oelint-adv",
           "prettier",
           "ruff",
+          "shellcheck",
           "shfmt",
           "stylua",
           "xmlformatter",
