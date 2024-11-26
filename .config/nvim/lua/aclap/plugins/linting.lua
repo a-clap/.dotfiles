@@ -13,6 +13,7 @@ return {
       proto = { "buf_lint" },
       python = { "mypy", "ruff" },
       shell = { "shellcheck" },
+      markdown = { "markdownlint" },
     }
 
     local clangtidy = lint.linters.clangtidy

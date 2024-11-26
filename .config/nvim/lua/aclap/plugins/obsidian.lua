@@ -39,8 +39,7 @@ return {
         min_chars = 2,
       },
       ui = {
-        checkboxes = {},
-        bullets = {},
+        enable = false,
       },
     },
     keys = {
