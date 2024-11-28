@@ -1,0 +1,8 @@
+<application>
+  <component name="CPPToolchains" version="9">
+    <toolchains detectedVersion="5">
+      <toolchain name="Default" toolSetKind="SYSTEM_UNIX_TOOLSET" debuggerKind="BUNDLED_GDB" />
+      <toolchain name="pik2-sdk" toolSetKind="SYSTEM_UNIX_TOOLSET" debuggerKind="BUNDLED_GDB" environment="/opt/pik2-sysvinit/1.0.0/environment-setup-cortexa9t2hf-neon-poky-linux-gnueabi" />
+    </toolchains>
+  </component>
+</application>

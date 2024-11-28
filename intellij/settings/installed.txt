@@ -1,0 +1,8 @@
+socrates.tabshifter
+String Manipulation
+Key Promoter X
+com.github.lonre.gruvbox-intellij-theme
+GrepConsole
+com.chylex.intellij.inspectionlens
+com.mallowigi
+IdeaVIM
