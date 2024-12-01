@@ -23,6 +23,7 @@ return {
             package_uninstalled = "✗",
           },
         },
+        PATH = "append",
       }
 
       mason_lspconfig.setup {
