@@ -1,6 +1,7 @@
 return {
   {
     "ellisonleao/gruvbox.nvim",
+    enabled = false,
     priority = 1000,
     config = function()
       require("gruvbox").setup {
@@ -30,5 +31,19 @@ return {
 
       vim.cmd "colorscheme gruvbox"
     end,
+  },
+  {
+    {
+      "f4z3r/gruvbox-material.nvim",
+      config = function()
+        require("gruvbox-material").setup {
+          -- contrast = "low",
+          -- contrast = "low",
+          contrast = "medium",
+          -- contrast = "high",
+          vim.cmd "colorscheme gruvbox-material",
+        }
+      end,
+    },
   },
 }
