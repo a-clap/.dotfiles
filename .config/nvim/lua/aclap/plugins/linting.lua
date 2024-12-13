@@ -14,6 +14,7 @@ return {
       python = { "mypy", "ruff" },
       shell = { "shellcheck" },
       markdown = { "markdownlint" },
+      rst = { "rstcheck" },
     }
 
     local clangtidy = lint.linters.clangtidy
