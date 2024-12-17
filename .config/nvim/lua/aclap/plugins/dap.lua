@@ -11,7 +11,17 @@ return {
 
       vim.api.nvim_set_keymap("n", "<leader>dt", ":DapUiToggle<CR>", { noremap = true })
       vim.api.nvim_set_keymap("n", "<leader>db", ":DapToggleBreakpoint<CR>", { noremap = true })
-      vim.api.nvim_set_keymap("n", "<F5>", ":DapContinue<CR>", { noremap = true })
+      vim.keymap.set("n", "<F5>", function()
+        if vim.fn.filereadable "launch.json" then
+          require("dap.ext.vscode").load_launchjs "launch.json"
+        end
+
+        if vim.fn.filereadable ".vscode/launch.json" then
+          require("dap.ext.vscode").load_launchjs(nil)
+        end
+
+        require("dap").continue()
+      end, { noremap = true })
       vim.api.nvim_set_keymap("n", "<F10>", ":DapStepOver<CR>", { noremap = true })
       vim.api.nvim_set_keymap("n", "<F11>", ":DapStepInto<CR>", { noremap = true })
       vim.api.nvim_set_keymap("n", "<F12>", ":DapStepOut<CR>", { noremap = true })
