@@ -31,7 +31,7 @@ return {
         ensure_installed = {
           "asm_lsp",
           "bashls",
-          "bufls",
+          "buf_ls",
           "clangd",
           "cmake",
           "dockerls",
