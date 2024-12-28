@@ -54,6 +54,12 @@ return {
         { name = "codeium" }, -- codeium
       },
 
+      filetype = {
+        sql = {
+          sources = { { name = "buffer" }, { name = "vim-dadbod-completion" } },
+        },
+      },
+
       sorting = {
         comparators = {
           cmp.config.compare.offset,
