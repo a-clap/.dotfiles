@@ -36,6 +36,7 @@ return {
           "cmake",
           "dockerls",
           "esbonio",
+          "ginko_ls",
           "gopls",
           "jsonls",
           "lemminx",
