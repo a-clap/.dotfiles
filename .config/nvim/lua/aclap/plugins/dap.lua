@@ -17,7 +17,7 @@ return {
         end
 
         if vim.fn.filereadable ".vscode/launch.json" then
-          require("dap.ext.vscode").load_launchjs(nil)
+          require("dap.ext.vscode").load_launchjs ".vscode/launch.json"
         end
 
         require("dap").continue()
