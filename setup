@@ -41,6 +41,6 @@ git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
 cp env.sh /etc/profile.d/env.sh && chmod a+x /etc/profile.d/env.sh
 
 # Create symlinks
-stow --target=$HOME .
+stow --target="$HOME" .
 
 exit 0
