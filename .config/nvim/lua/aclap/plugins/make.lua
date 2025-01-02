@@ -5,9 +5,9 @@ return {
     dependencies = { "stevearc/overseer.nvim" },
     opts = {},
     keys = {
-      { "<leader>mo", "<cmd>MakeitOpen<CR>", desc = "Makefile: open tasks" },
-      { "<leader>ms", "<cmd>MakeitToggleResults<CR>", desc = "Makefile: toggle results" },
-      { "<leader>mr", "<cmd>MakeitRedo<CR>", desc = "Makefile: redo" },
+      { "<leader>mm", "<cmd>MakeitOpen<CR>", desc = "Makefile: open tasks" },
+      { "<leader>mt", "<cmd>MakeitToggleResults<CR>", desc = "Makefile: toggle results" },
+      { "<leader>md", "<cmd>MakeitRedo<CR>", desc = "Makefile: redo" },
     },
   },
   {
