@@ -94,6 +94,11 @@ return {
           capabilities = capabilities,
         }
       end,
+      ["ginko_ls"] = function()
+        lspconfig["ginko_ls"].setup {
+          filetypes = { "dts", "dtsi", "dtso" },
+        }
+      end,
       ["pyright"] = function()
         lspconfig["pyright"].setup {
           capabilities = capabilities,
