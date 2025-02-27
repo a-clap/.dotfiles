@@ -58,7 +58,7 @@ return {
           "clang-format",
           "cmakelint",
           "codelldb",
-          "cppdbg",
+          "cpptools",
           "debugpy",
           "flake8",
           "go-debug-adapter",
