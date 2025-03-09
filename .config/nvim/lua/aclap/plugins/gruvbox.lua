@@ -61,6 +61,7 @@ return {
           vim.g.gruvbox_material_foreground = "mix"
           vim.g.gruvbox_material_enable_italic = false
           vim.g.gruvbox_material_enable_bold = 1
+          vim.g.gruvbox_material_diagnostic_virtual_text = "colored"
 
           vim.cmd.colorscheme "gruvbox-material"
         end,
