@@ -85,7 +85,9 @@ return {
     end
 
     -- qmlls setup
-    lspconfig.qmlls.setup {}
+    lspconfig.qmlls.setup {
+      cmd = { "qmlls", "-E" },
+    }
 
     mason_lspconfig.setup_handlers {
       -- default handler for installed servers
