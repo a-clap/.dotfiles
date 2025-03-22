@@ -11,8 +11,14 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({ { import = "aclap.plugins" }, { import = "aclap.plugins.lsp" } }, {
-  change_detection = {
-    notify = false,
+require("lazy").setup {
+  spec = {
+    { import = "aclap.plugins" },
+    { import = "aclap.plugins.lsp" },
   },
-})
+  defaults = {
+    change_detection = {
+      notify = false,
+    },
+  },
+}
