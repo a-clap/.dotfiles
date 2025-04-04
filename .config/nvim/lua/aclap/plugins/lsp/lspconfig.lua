@@ -48,18 +48,8 @@ return {
         opts.desc = "Smart rename"
         keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
 
-        -- TODO: Do I need this?
-        -- opts.desc = "Show buffer diagnostics"
-        -- keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show  diagnostics for file
-
         opts.desc = "Show line diagnostics"
         keymap.set("n", "<leader>D", vim.diagnostic.open_float, opts) -- show diagnostics for line
-
-        opts.desc = "Go to previous diagnostic"
-        keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
-
-        opts.desc = "Go to next diagnostic"
-        keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
 
         opts.desc = "Show documentation for what is under cursor"
         keymap.set("n", "<C-q>", vim.lsp.buf.hover, opts)
@@ -76,14 +66,6 @@ return {
 
     -- used to enable autocompletion (assign to every lsp server config)
     local capabilities = cmp_nvim_lsp.default_capabilities()
-
-    -- Change the Diagnostic symbols in the sign column (gutter)
-    -- (not in youtube nvim video)
-    local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-    for type, icon in pairs(signs) do
-      local hl = "DiagnosticSign" .. type
-      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-    end
 
     -- qmlls setup
     lspconfig.qmlls.setup {
@@ -183,11 +165,6 @@ return {
           single_file_support = true,
           on_attach = function()
             vim.keymap.set("n", "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", { desc = "Switch Source/Header (C/C++)" })
-
-            -- vim.lsp.inlay_hint.enable(false, { 0 })
-            -- require("clangd_extensions.inlay_hints").setup_autocmd()
-            -- require("clangd_extensions.inlay_hints").disable_inlay_hints()
-            -- require("clangd_extensions.inlay_hints").set_inlay_hints()
           end,
         }
       end,
