@@ -83,6 +83,7 @@ return {
           "shellcheck",
           "shfmt",
           "stylua",
+          "taplo",
           "xmlformatter",
           "yamlfmt",
           "yamllint",

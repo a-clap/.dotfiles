@@ -20,6 +20,7 @@ return {
         python = { "isort", "black" },
         rust = { "rustfmt" },
         sh = { "shfmt" },
+        toml = { "taplo" },
         xml = { "xmlformat" },
         yaml = { "yamlfmt" },
       },
