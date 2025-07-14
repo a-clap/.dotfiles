@@ -6,15 +6,15 @@ return {
 
     lint.linters_by_ft = {
       bitbake = { "oelint-adv" },
-      make = { "checkmake" },
       cmake = { "cmakelint" },
       docker = { "hadolint" },
       lua = { "luacheck" },
+      make = { "checkmake" },
+      markdown = { "markdownlint" },
       proto = { "buf_lint" },
       python = { "mypy", "ruff" },
-      shell = { "shellcheck" },
-      markdown = { "markdownlint" },
       rst = { "rstcheck" },
+      shell = { "shellcheck" },
     }
 
     local clangtidy = lint.linters.clangtidy
