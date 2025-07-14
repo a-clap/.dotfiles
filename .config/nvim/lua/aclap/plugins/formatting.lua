@@ -11,6 +11,8 @@ return {
         cmake = { "cmake_format" },
         cpp = { "clang-format" },
         go = { "gofumpt", "golines", "goimports-reviser" },
+        html = { "prettier" },
+        javascript = { "prettier" },
         json = { "prettier" },
         lua = { "stylua" },
         markdown = { "prettier" },
