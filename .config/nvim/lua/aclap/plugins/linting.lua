@@ -8,6 +8,7 @@ return {
       bitbake = { "oelint-adv" },
       cmake = { "cmakelint" },
       docker = { "hadolint" },
+      jinja = { "djlint" },
       lua = { "luacheck" },
       make = { "checkmake" },
       markdown = { "markdownlint" },
