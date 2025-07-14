@@ -8,6 +8,7 @@ return {
   },
 
   config = function()
+    vim.lsp.set_log_level "off"
     -- import lspconfig plugin
     local lspconfig = require "lspconfig"
 
