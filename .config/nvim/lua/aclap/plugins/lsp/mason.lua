@@ -1,7 +1,6 @@
 return {
   {
     "williamboman/mason.nvim",
-    version = "^1.0.0",
     dependencies = {
       "williamboman/mason-lspconfig.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -29,6 +28,7 @@ return {
       mason_lspconfig.setup {
         -- list of servers for mason to install
         automatic_installation = true,
+        automatic_enable = true,
         ensure_installed = {
           "asm_lsp",
           "bashls",

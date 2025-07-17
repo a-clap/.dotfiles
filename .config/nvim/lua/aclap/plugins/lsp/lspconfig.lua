@@ -69,106 +69,78 @@ return {
     local capabilities = cmp_nvim_lsp.default_capabilities()
 
     -- qmlls setup
-    lspconfig.qmlls.setup {
+    vim.lsp.config("*", {
+      capabilities = capabilities,
+    })
+
+    vim.lsp.config("qmlls", {
       cmd = { "qmlls", "-E" },
-    }
+    })
 
-    mason_lspconfig.setup_handlers {
-      -- default handler for installed servers
-      function(server_name)
-        lspconfig[server_name].setup {
-          capabilities = capabilities,
-        }
-      end,
-      ["ginko_ls"] = function()
-        lspconfig["ginko_ls"].setup {
-          filetypes = { "dts", "dtsi", "dtso" },
-        }
-      end,
-      ["pyright"] = function()
-        lspconfig["pyright"].setup {
-          capabilities = capabilities,
-          settings = {
-            pyright = {
-              disableOrganizeImports = true, -- Using Ruff
-            },
-          },
-        }
-      end,
-      ["gopls"] = function()
-        lspconfig["gopls"].setup {
-          capabilities = capabilities,
-          filetypes = { "go", "gomod", "gowork", "gotmpl" },
-          settings = {
-            gopls = {
-              completeUnimported = true,
-              usePlaceholders = true,
-              analyses = {
-                unusedParams = true,
-              },
-            },
-          },
-        }
-      end,
-      ["lua_ls"] = function()
-        -- configure lua server (with special settings)
-        lspconfig["lua_ls"].setup {
-          capabilities = capabilities,
-          settings = {
-            Lua = {
-              -- make the language server recognize "vim" global
-              diagnostics = {
-                globals = { "vim" },
-              },
-              completion = {
-                callSnippet = "Replace",
-              },
-            },
-          },
-        }
-      end,
-      ["clangd"] = function()
-        lspconfig["clangd"].setup {
-          filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
-          root_dir = function(fname)
-            return require("lspconfig.util").root_pattern(
-              "Makefile",
-              "configure.ac",
-              "configure.in",
-              "config.h.in",
-              "meson.build",
-              "meson_options.txt",
-              "build.ninja"
-            )(fname) or require("lspconfig.util").root_pattern("compile_commands.json", "compile_flags.txt")(fname) or require("lspconfig.util").find_git_ancestor(
-              fname
-            )
-          end,
-          capabilities = (function()
-            capabilities.offsetEncoding = { "utf-16" }
-            return capabilities
-          end)(),
+    vim.lsp.config("clangd", {
+      cmd = {
+        "clangd",
+        "--j=8",
+        "--background-index",
+        "--clang-tidy",
+        "--header-insertion=iwyu",
+        "--completion-style=detailed",
+        "--malloc-trim",
+        "--pch-storage=memory",
+      },
+      init_options = {
+        usePlaceholders = true,
+        completeUnimported = true,
+        clangdFileStatus = true,
+      },
+      single_file_support = true,
 
-          cmd = {
-            "clangd",
-            "--j=8",
-            "--background-index",
-            "--clang-tidy",
-            "--header-insertion=iwyu",
-            "--completion-style=detailed",
-            "--malloc-trim",
-            "--pch-storage=memory",
-          },
-          init_options = {
-            usePlaceholders = true,
-            completeUnimported = true,
-            clangdFileStatus = true,
-          },
-          single_file_support = true,
-          on_attach = function()
-            vim.keymap.set("n", "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", { desc = "Switch Source/Header (C/C++)" })
-          end,
-        }
+      on_attach = function()
+        vim.keymap.set("n", "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", { desc = "Switch Source/Header (C/C++)" })
       end,
-    }
+    })
+
+    vim.lsp.config("ginko_ls", {
+      filetypes = { "dts", "dtsi", "dtso" },
+    })
+
+    vim.lsp.config("pyright", {
+      capabilities = capabilities,
+      settings = {
+        pyright = {
+          disableOrganizeImports = true, -- Using Ruff
+        },
+      },
+    })
+
+    vim.lsp.config("gopls", {
+      capabilities = capabilities,
+      filetypes = { "go", "gomod", "gowork", "gotmpl" },
+      settings = {
+        gopls = {
+          completeUnimported = true,
+          usePlaceholders = true,
+          analyses = {
+            unusedParams = true,
+          },
+        },
+      },
+    })
+
+    -- configure lua server (with special settings)
+    vim.lsp.config("lua_ls", {
+      capabilities = capabilities,
+      settings = {
+        Lua = {
+          -- make the language server recognize "vim" global
+          diagnostics = {
+            globals = { "vim" },
+          },
+          completion = {
+            callSnippet = "Replace",
+          },
+        },
+      },
+    })
   end,
 }
