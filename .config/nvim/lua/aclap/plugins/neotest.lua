@@ -18,6 +18,7 @@ return {
           require "neotest-python" {
             runner = "pytest",
             dap = { justMyCode = false },
+            args = { "-vv", "--capture=tee-sys", "--log-level=DEBUG", "-s" },
             pytest_discover_instances = true,
           },
           require "neotest-golang",
