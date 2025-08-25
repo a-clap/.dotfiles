@@ -8,7 +8,7 @@ return {
     local keymap = vim.keymap -- for conciseness
 
     keymap.set("n", "<leader>cb", "<cmd>CMakeBuild<CR>", { desc = "CMake Build" })
-    keymap.set("n", "<leader>cp", "<cmd>CMakeSelectConfigurePreset<CR>", { desc = "CMake select configure preset" })
+    keymap.set("n", "<leader>cp", "<cmd>CMakeSelectBuildPreset<CR>", { desc = "CMake select build preset" })
     keymap.set("n", "<leader>cx", "<cmd>CMakeClean<CR>", { desc = "CMake clean" })
     keymap.set("n", "<leader>cr", "<cmd>CMakeRun<CR>", { desc = "CMake run" })
     keymap.set("n", "<leader>cd", "<cmd>CMakeDebug<CR>", { desc = "CMake debug" })
