@@ -75,6 +75,8 @@ return {
 
     vim.lsp.config("qmlls", {
       cmd = { "qmlls", "-E" },
+      capabilities = capabilities,
+      filetypes = { "qmljs", "qml" },
     })
 
     vim.lsp.config("clangd", {
