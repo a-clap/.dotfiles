@@ -60,6 +60,7 @@ return {
           "checkmake",
           "clang-format",
           "cmakelint",
+          "cmakelang",
           "codelldb",
           "cpptools",
           "debugpy",
