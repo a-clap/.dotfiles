@@ -8,7 +8,6 @@ return {
       formatters_by_ft = {
         asm = { "asmfmt" },
         c = { "clang-format" },
-        cmake = { "cmake_format" },
         cpp = { "clang-format" },
         go = { "gofumpt", "golines", "goimports-reviser" },
         html = { "prettier" },
