@@ -4,6 +4,17 @@ return {
     "nvim-lua/plenary.nvim",
     "stevearc/overseer.nvim",
   },
+  cond = function()
+    -- local files = { "package.json", "pyproject.toml", "Cargo.toml" }
+    --
+    --   for _, file in ipairs(files) do
+    --     if vim.loop.fs_stat(cwd .. "/" .. file) then
+    --       return true
+    --     end
+    --   end
+    local cwd = vim.loop.cwd()
+    return vim.loop.fs_stat(cwd .. "/CMakeLists.txt") ~= nil
+  end,
   config = function()
     local keymap = vim.keymap -- for conciseness
 
