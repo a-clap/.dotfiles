@@ -106,15 +106,139 @@ return {
       filetypes = { "dts", "dtsi", "dtso" },
     })
 
-    vim.lsp.config("pyright", {
-      capabilities = capabilities,
-      settings = {
-        pyright = {
-          disableOrganizeImports = true, -- Using Ruff
+    --  python setup based on: https://github.com/Jaehaks/nvim_config/blob/03db5c43394a7ee5c5900e79908f31fced4a5b3e/lua/jaehak/core/lsp.lua
+    --  -- ###### 6) python language server configuration ###########
+    -- a) ruff : use code_action(but cannot all fix) / use Formatting / fast type check inherited
+    -- b) pyright : no code_action / no Formatting / fast type check inherited
+    -- c) pylsp : no code action / use Formatting / slow type check disinherited
+    -- flake8 is also fast, but I found that pyright / ruff are faster a more little bit
+    -- 		but not big differences, I understand that type checking of pyright is more accurate than ruff/flake8
+    -- 		pyright has more accuracy about unused variable, linter's error is shadowed by other error when it detects multiple error
+    -- 		organizeImports is applied to both pyright and ruff / buf ruff has code action to this
+    -- 		linter is not type checker... it helps code convention as formatting rule, and better style of code
+    --      it detects some trivial error like undefined , but it cannot detect type checking error
+    --      On the other hand, pyright does not support linting(better style checker)
+    --      but for trivial error, ruff / flake8 / pyright detect in the same time
+    -- (241117) : ruff_lsp is deprecated
+    -- cmp_nvim_lsp default_configuration add completionProvider. ruff_lsp don't use completion
+    -- #############################################################
+    -- ####### ruff : linter
+    -- #############################################################
+    -- main purpose is fast linting diagnostics
+    local root_dir_ruff = function(bufnr, cb)
+      local root = vim.fs.root(bufnr, {
+        "pyproject.toml",
+        "ruff.toml",
+        ".ruff.toml",
+        ".git",
+      }) or vim.fn.expand "%:p:h"
+      cb(root)
+    end
+    vim.lsp.config("ruff", {
+      cmd = { "ruff", "server" },
+      filetypes = { "python" },
+      root_dir = root_dir_ruff,
+      on_attach = function(client, _)
+        -- lsp use ruff to formatter
+        client.server_capabilities.documentFormattingProvider = false -- enable vim.lsp.buf.format()
+        client.server_capabilities.documentRangeFormattingProvider = false -- formatting will be used by confirm.nvim
+        client.server_capabilities.hoverProvider = false -- use basedpyrigt
+      end,
+      init_options = {
+        settings = {
+          -- configuration = require("jaehak.core.paths").lsp.ruff.config_path,
+          -- logFile = require("jaehak.core.paths").lsp.ruff.log_path,
+          logLevel = "warn",
+          organizeImports = true, -- use code action for organizeImports
+          showSyntaxErrors = true, -- show syntax error diagnostics
+          codeAction = {
+            disableRuleComment = { enable = false }, -- show code action about rule disabling
+            fixViolation = { enable = false }, -- show code action for autofix violation
+          },
+          format = { -- use conform.nvim
+            preview = false,
+          },
+          lint = { -- it links with ruff, but lint.args are different with ruff configuration
+            enable = true,
+          },
+        },
+      },
+      single_file_support = false,
+    })
+
+    -- #############################################################
+    -- ####### basedpyright
+    -- #############################################################
+    -- main purpose is exact type checking diagnostics
+    -- It has very slow lsp completion to use
+    local root_dir_basedpyright = function(bufnr, cb)
+      local root = vim.fs.root(bufnr, {
+        "pyproject.toml",
+        "pyrightconfig.json",
+        ".git",
+      }) or vim.fn.expand "%:p:h"
+      cb(root)
+    end
+    vim.lsp.config("basedpyright", {
+      cmd = { "basedpyright-langserver", "--stdio" },
+      filetypes = { "python" },
+      root_dir = root_dir_basedpyright,
+      on_attach = function(client, _)
+        client.server_capabilities.completionProvider = false -- use pyrefly for fast response
+        client.server_capabilities.definitionProvider = false -- use pyrefly for fast response
+        client.server_capabilities.documentHighlightProvider = false -- use pyrefly for fast response
+        client.server_capabilities.renameProvider = false -- use pyrefly as I think it is stable
+        client.server_capabilities.semanticTokensProvider = false -- use pyrefly it is more rich
+      end,
+      settings = { -- see https://docs.basedpyright.com/latest/configuration/language-server-settings/
+        basedpyright = {
+          disableOrganizeImports = true, -- use ruff instead of it
+          analysis = {
+            autoImportCompletions = true,
+            autoSearchPaths = true, -- auto serach command paths like 'src'
+            diagnosticMode = "openFilesOnly",
+            useLibraryCodeForTypes = true,
+            diagnosticSeverityOverrides = {
+              reportUnknownMemberType = "none", -- ignore warning : cannot infer member type of object like matplot
+            },
+          },
         },
       },
     })
 
+    -- #############################################################
+    -- ####### pyrefly
+    -- #############################################################
+    -- main purpose is fast completion/semanticTokens
+    -- the alternative of it is ty, but it is experimental yet
+    local root_dir_pyrefly = function(bufnr, cb)
+      local root = vim.fs.root(bufnr, {
+        "pyproject.toml",
+        "pyrefly.roml",
+        ".git",
+      }) or vim.fn.expand "%:p:h"
+      cb(root)
+    end
+    vim.lsp.config("pyrefly", {
+      cmd = { "pyrefly", "lsp" },
+      filetypes = { "python" },
+      root_dir = root_dir_pyrefly,
+      on_attach = function(client, _)
+        client.server_capabilities.codeActionProvider = false -- basedpyright has more kinds
+        client.server_capabilities.documentSymbolProvider = false -- basedpyright has more kinds
+        client.server_capabilities.hoverProvider = false -- basedpyright has more kinds
+        client.server_capabilities.inlayHintProvider = false -- basedpyright has more kinds
+        client.server_capabilities.referenceProvider = false -- basedpyright has more kinds
+        client.server_capabilities.signatureHelpProvider = false -- basedpyright has more kinds
+      end,
+      settings = {},
+    })
+
+    vim.api.nvim_create_augroup("PyreflyKill", { clear = true })
+    vim.api.nvim_create_autocmd("VimLeavePre", {
+      group = "PyreflyKill",
+    })
+    --  end
     vim.lsp.config("gopls", {
       capabilities = capabilities,
       filetypes = { "go", "gomod", "gowork", "gotmpl" },
