@@ -6,59 +6,61 @@ return {
     "windwp/nvim-ts-autotag",
   },
   branch = "master",
-  config = function()
+  opts = {
+    highlight = {
+      enable = true,
+    },
+    -- enable indentation
+    indent = { enable = true },
+    -- enable autotagging (w/ nvim-ts-autotag plugin)
+    autotag = {
+      enable = true,
+    },
+    -- ensure these language parsers are installed
+    ensure_installed = {
+      "json",
+      "yaml",
+      "html",
+      "css",
+      "prisma",
+      "markdown",
+      "markdown_inline",
+      "bash",
+      "lua",
+      "vim",
+      "dockerfile",
+      "gitignore",
+      "query",
+      "vimdoc",
+      "c",
+      "cpp",
+      "cmake",
+      "bitbake",
+      "devicetree",
+      "go",
+      "make",
+      "python",
+      "rst",
+      "rust",
+      "ron",
+      "zig",
+    },
+    -- enable syntax highlighting
+    incremental_selection = {
+      enable = true,
+      keymaps = {
+        init_selection = "<C-space>",
+        node_incremental = "<C-space>",
+        scope_incremental = false,
+        node_decremental = "<bs>",
+      },
+    },
+  },
+  config = function(_, opts)
     -- import nvim-treesitter plugin
     local treesitter = require "nvim-treesitter.configs"
 
     -- configure treesitter
-    treesitter.setup { -- enable syntax highlighting
-      highlight = {
-        enable = true,
-      },
-      -- enable indentation
-      indent = { enable = true },
-      -- enable autotagging (w/ nvim-ts-autotag plugin)
-      autotag = {
-        enable = true,
-      },
-      -- ensure these language parsers are installed
-      ensure_installed = {
-        "json",
-        "yaml",
-        "html",
-        "css",
-        "prisma",
-        "markdown",
-        "markdown_inline",
-        "bash",
-        "lua",
-        "vim",
-        "dockerfile",
-        "gitignore",
-        "query",
-        "vimdoc",
-        "c",
-        "cpp",
-        "cmake",
-        "bitbake",
-        "devicetree",
-        "go",
-        "make",
-        "python",
-        "rst",
-        "rust",
-        "ron",
-        "zig",
-      },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<C-space>",
-          node_incremental = "<C-space>",
-          scope_incremental = false,
-          node_decremental = "<bs>",
-        },
-      },
-    }
+    treesitter.setup { opts }
   end,
 }
