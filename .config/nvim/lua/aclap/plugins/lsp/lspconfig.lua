@@ -234,10 +234,10 @@ return {
       settings = {},
     })
 
-    vim.api.nvim_create_augroup("PyreflyKill", { clear = true })
-    vim.api.nvim_create_autocmd("VimLeavePre", {
-      group = "PyreflyKill",
-    })
+    -- vim.api.nvim_create_augroup("PyreflyKill", { clear = true })
+    -- vim.api.nvim_create_autocmd("VimLeavePre", {
+    --   group = "PyreflyKill",
+    -- })
     --  end
     vim.lsp.config("gopls", {
       capabilities = capabilities,
