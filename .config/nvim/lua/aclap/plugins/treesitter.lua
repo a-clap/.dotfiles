@@ -41,8 +41,6 @@ return {
       "make",
       "python",
       "rst",
-      "rust",
-      "ron",
       "zig",
     },
     -- enable syntax highlighting
