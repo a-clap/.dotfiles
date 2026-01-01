@@ -11,6 +11,26 @@ return {
         rst = { "rstcheck" },
         ["*"] = { "typos" },
       },
+      linters = {
+
+        clangtidy = {
+          args = {
+            "-extra-arg=-ferror-limit=0",
+          },
+        },
+
+        -- .luacheck.args = {
+        --   "--globals",
+        --   "vim",
+        -- }
+        --
+        markdownlint = {
+          args = {
+            "--stdin",
+            "--disable MD013",
+          },
+        },
+      },
     },
   },
   {
@@ -23,7 +43,6 @@ return {
         "markdownlint",
         "oelint-adv",
         "rstcheck",
-        "shfmt",
         "typos",
       },
     },
