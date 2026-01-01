@@ -12,6 +12,7 @@ config = {
   -- font = wezterm.font "JetBrainsMono Nerd Font",
   font_size = 14.5,
 
+  enable_wayland = false,
   enable_tab_bar = false,
   window_close_confirmation = "NeverPrompt",
   default_cursor_style = "SteadyBlock",
@@ -26,9 +27,6 @@ config = {
   window_background_opacity = 0.95,
   macos_window_background_blur = 20,
   max_fps = 120,
-
-  -- Removes the macos bar at the top with the 3 buttons
-  window_decorations = "RESIZE",
 }
 
 -- and finally, return the configuration to wezterm
