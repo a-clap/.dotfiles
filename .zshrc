@@ -21,6 +21,12 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
+if [[ -n $SSH_CONNECTION ]]; then
+    export EDITOR="vim"
+else
+    export EDITOR="nvim"
+fi
+
 fpath+=~/.zfunc
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
