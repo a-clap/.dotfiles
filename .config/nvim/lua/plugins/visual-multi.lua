@@ -12,8 +12,8 @@ return {
         { "<leader>mr", "<Plug>(VM-Start-Regex-Search)", desc = "Start Regex Search", mode = { "n" } },
         { "<leader>mp", "<Plug>(VM-Add-Cursor-At-Pos)", desc = "Add Cursor At Pos", mode = { "n" } },
         { "<leader>mo", "<Plug>(VM-Toggle-Mappings)", desc = "Toggle Mapping", mode = { "n" } },
-        { "<C-Down>", "<Plug>(VM-Add-Cursor-Down)", desc = "Add Cursor Down", mode = { "n" } },
-        { "<C-Up>", "<Plug>(VM-Add-Cursor-Up)", desc = "Add Cursor Up", mode = { "n" } },
+        { "<C-A-Down>", "<Plug>(VM-Add-Cursor-Down)", desc = "Add Cursor Down", mode = { "n" } },
+        { "<C-A-Up>", "<Plug>(VM-Add-Cursor-Up)", desc = "Add Cursor Up", mode = { "n" } },
       })
     end,
   },
