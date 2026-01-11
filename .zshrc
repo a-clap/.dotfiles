@@ -68,21 +68,5 @@ if [[ -d $PYENV_ROOT ]]; then
   eval "$(pyenv init - zsh)"
 fi
 
-alias nvim-lazy="NVIM_APPNAME=LazyVim nvim"
-
-function nvims() {
-  items=("default" "LazyVim")
-  config=$(printf "%s\n" "${items[@]}" | fzf --prompt=" Neovim Config  " --height=~50% --layout=reverse --border --exit-0)
-  if [[ -z $config ]]; then
-    echo "Nothing selected"
-    return 0
-  elif [[ $config == "default" ]]; then
-    config=""
-  fi
-  NVIM_APPNAME=$config nvim $@
-}
-
-bindkey -s ^a "nvims\n"
-
 ZSHRC_LOCAL=$HOME/.zshrc.local
 [[ -e $ZSHRC_LOCAL ]] && . "$ZSHRC_LOCAL"
