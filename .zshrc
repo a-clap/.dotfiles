@@ -32,6 +32,10 @@ else
   export EDITOR="nvim"
 fi
 
+export ZVM_VI_EDITOR=nvim
+export GIT_EDITOR=nvim
+export SVN_EDITOR=nvim
+
 autoload -U compinit
 compinit -i
 
@@ -58,7 +62,7 @@ if [[ -e "$HOME/.cargo/env" ]]; then
 fi
 
 # direnv
-command_exist direnv && eval "$(direnv hook zsh)"
+command_exist direnv  && eval "$(direnv hook zsh)"
 
 # pyenv
 PYENV_ROOT="$HOME/.pyenv"
@@ -66,6 +70,38 @@ if [[ -d $PYENV_ROOT ]]; then
   export PYENV_ROOT="$PYENV_ROOT"
   [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
   eval "$(pyenv init - zsh)"
+fi
+
+# zig
+ZIG_ROOT="/usr/local/zig"
+if [[ -d $ZIG_ROOT ]]; then
+  export ZIG_ROOT=$ZIG_ROOT
+  export PATH=$PATH:$ZIG_ROOT:
+fi
+
+# go
+GOPATH="$HOME/go"
+if [[ -d $GOPATH ]]; then
+  export GOPATH=$GOPATH
+  export PATH=$PATH:$GOPATH/bin:/usr/local/go/bin:
+fi
+
+# bun
+BUN_INSTALL="$HOME/.bun"
+if [[ -d $BUN_INSTALL ]]; then
+  export BUN_INSTALL=$BUN_INSTALL
+  export PATH=$PATH:$BUN_INSTALL/bin:
+  [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
+fi
+
+# aliases
+alias vim=nvim
+if command_exist eza; then
+  alias l='eza -lh --icons=auto'                                         # long list
+  alias ls='eza -1 --icons=auto'                                         # short list
+  alias ll='eza -lha --icons=auto --sort=name --group-directories-first' # long list all
+  alias ld='eza -lhD --icons=auto'                                       # long list dirs
+  alias lt='eza --icons=auto --tree'                                     # list folder as tree
 fi
 
 ZSHRC_LOCAL=$HOME/.zshrc.local
