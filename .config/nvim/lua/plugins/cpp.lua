@@ -49,4 +49,63 @@ return {
       })
     end,
   },
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        clangd = {
+          cmd = {
+            "clangd",
+            "--j=8",
+            "--background-index",
+            "--clang-tidy",
+            "--header-insertion=iwyu",
+            "--completion-style=detailed",
+            "--malloc-trim",
+            "--pch-storage=memory",
+          },
+        },
+      },
+    },
+  },
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "alfaix/neotest-gtest",
+    },
+    opts = {
+      adapters = {
+        ["neotest-gtest"] = {
+          is_test_file = function(file_path)
+            local lib = require("neotest.lib")
+            local _test_extensions = {
+              ["cpp"] = true,
+              ["cppm"] = true,
+              ["cc"] = true,
+              ["cxx"] = true,
+              ["c++"] = true,
+            }
+
+            local elems = vim.split(file_path, lib.files.sep, { plain = true })
+
+            local filename = elems[#elems]
+            if filename == "" then -- directory
+              return false
+            end
+            local extsplit = vim.split(filename, ".", { plain = true })
+            local extension = extsplit[#extsplit]
+            local fname_last_part = extsplit[#extsplit - 1]
+            local result = _test_extensions[extension]
+                and (vim.startswith(filename, "test_") or vim.endswith(fname_last_part, "_test") or vim.endswith(
+                  fname_last_part,
+                  "_tests"
+                ))
+              or false
+            return result
+          end,
+        },
+      },
+    },
+  },
 }
