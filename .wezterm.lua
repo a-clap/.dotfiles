@@ -4,6 +4,8 @@ local wezterm = require "wezterm"
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
+local act = wezterm.action
+
 -- This is where you actually apply your config choices
 config = {
   color_scheme = "Gruvbox Dark (Gogh)",
@@ -27,6 +29,10 @@ config = {
   window_background_opacity = 0.95,
   macos_window_background_blur = 20,
   max_fps = 120,
+
+  keys = {
+    { key = "Backspace", mods = "CTRL", action = act.SendKey { key = "w", mods = "CTRL" } },
+  },
 }
 
 -- and finally, return the configuration to wezterm

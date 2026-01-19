@@ -5,3 +5,4 @@
 ---- use `vim.keymap.set` instead
 local map = vim.keymap.set
 map({ "i", "x", "n", "s" }, "<leader>ww", "<cmd>w<cr><esc>", { desc = "Save File" })
+map({ "i" }, "<C-BS>", "<C-W>", { noremap = true, desc = "Delete a word" })
