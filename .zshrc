@@ -8,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-zvm_after_init_commands+=('[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh')
+zvm_after_init_commands+=('command -v fzf 1>/dev/null 2>/dev/null && source <(fzf --zsh)')
 plugins=(
   fzf
   git
