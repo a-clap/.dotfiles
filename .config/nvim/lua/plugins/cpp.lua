@@ -14,7 +14,8 @@ return {
 
       keymap.set("n", "<leader>cb", "<cmd>CMakeBuild<CR>", { desc = "CMake Build" })
       keymap.set("n", "<leader>cp", "<cmd>CMakeSelectBuildPreset<CR>", { desc = "CMake select build preset" })
-      keymap.set("n", "<leader>cx", "<cmd>CMakeClean<CR>", { desc = "CMake clean" })
+      keymap.set("n", "<leader>cc", "<cmd>CMakeClean<CR>", { desc = "CMake clean" })
+      keymap.set("n", "<leader>cx", "<cmd>CMakeStopExecutor<CR><cmd>CMakeStopRunner<CR>", { desc = "CMake stop" })
       keymap.set("n", "<leader>cr", "<cmd>CMakeRun<CR>", { desc = "CMake run" })
       keymap.set("n", "<leader>cd", "<cmd>CMakeDebug<CR>", { desc = "CMake debug" })
       keymap.set("n", "<leader>ct", "<cmd>CMakeRunTest<CR>", { desc = "CMake run test" })
