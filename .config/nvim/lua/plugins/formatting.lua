@@ -14,6 +14,7 @@ return {
         markdown = { "prettier" },
         proto = { "buf" },
         python = { "ruff_format" },
+        qml = { "qmlformat" },
         rust = { "rustfmt" },
         sh = { "shfmt" },
         toml = { "taplo" },
