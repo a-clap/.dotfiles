@@ -29,6 +29,9 @@ return {
         xmlformat = {
           prepend_args = { "--blanks", "--selfclose" },
         },
+        qmlformat = {
+          command = "qmlformat6",
+        },
       },
     },
   },

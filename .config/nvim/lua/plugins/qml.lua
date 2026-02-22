@@ -3,7 +3,8 @@ return {
   opts = {
     servers = {
       qmlls = {
-        cmd = { "qmlls6", "--no-cmake-calls", "-v" },
+        cmd = { "qmlls6", "--no-cmake-calls" },
+        mason = false,
       },
     },
   },
