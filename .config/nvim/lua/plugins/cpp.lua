@@ -73,11 +73,11 @@ return {
     "nvim-neotest/neotest",
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "alfaix/neotest-gtest",
+      "orjangj/neotest-ctest",
     },
     opts = {
       adapters = {
-        ["neotest-gtest"] = {
+        ["neotest-ctest"] = {
           is_test_file = function(file_path)
             local lib = require("neotest.lib")
             local _test_extensions = {
@@ -98,10 +98,12 @@ return {
             local extension = extsplit[#extsplit]
             local fname_last_part = extsplit[#extsplit - 1]
             local result = _test_extensions[extension]
-                and (vim.startswith(filename, "test_") or vim.endswith(fname_last_part, "_test") or vim.endswith(
-                  fname_last_part,
-                  "_tests"
-                ))
+                and (
+                  vim.startswith(filename, "test_")
+                  or vim.endswith(fname_last_part, "_test") --
+                  or vim.startswith(filename, "tests_")
+                  or vim.endswith(fname_last_part, "_tests")
+                )
               or false
             return result
           end,
