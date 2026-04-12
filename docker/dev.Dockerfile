@@ -1,7 +1,7 @@
 FROM archlinux:base-devel-20260308.0.497099
 
-RUN pacman -Syu --noconfirm
-RUN pacman --noconfirm -S \
+RUN pacman -Syyu --noconfirm
+RUN pacman --noconfirm -Su \
   asio \
   boost \
   cmake \
@@ -15,6 +15,7 @@ RUN pacman --noconfirm -S \
   git \
   go \
   gtest \
+  inja \
   lazygit \
   lua51 \
   luarocks \
@@ -60,6 +61,4 @@ WORKDIR $HOME
 RUN chsh -s /usr/bin/zsh
 ENV SHELL=/usr/bin/zsh
 
-RUN pacman --noconfirm -S \
-  qt6-declarative \
-  net-snmp
+RUN nvim --headless "+Lazy sync" "+qa" || 0
