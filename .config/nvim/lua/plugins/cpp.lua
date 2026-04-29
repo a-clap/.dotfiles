@@ -10,6 +10,24 @@ return {
       return vim.loop.fs_stat(cwd .. "/CMakeLists.txt") ~= nil
     end,
     config = function()
+      local function run_cmake_target_with_args()
+        local cmake = require("cmake-tools")
+
+        local target = cmake.get_launch_target()
+        if not target then
+          print("Set target before")
+          return
+        end
+
+        vim.ui.input({
+          prompt = "Args for (" .. target .. "): ",
+        }, function(input)
+          -- Set LaunchArgs
+          vim.cmd.CMakeLaunchArgs('"' .. input .. '"')
+          -- Run
+          vim.cmd.CMakeRun()
+        end)
+      end
       local keymap = vim.keymap
 
       keymap.set("n", "<leader>cb", "<cmd>CMakeBuild<CR>", { desc = "CMake Build" })
@@ -23,19 +41,7 @@ return {
       keymap.set("n", "<leader>cfr", "<cmd>CMakeRunCurrentFile<CR>", { desc = "CMake run current file" })
       keymap.set("n", "<leader>csb", "<cmd>CMakeSelectBuildTarget<CR>", { desc = "Select build target" })
       keymap.set("n", "<leader>csl", "<cmd>CMakeSelectLaunchTarget<CR>", { desc = "Select launch target" })
-      keymap.set("n", "<leader>csa", function()
-        local args
-        vim.ui.input({
-          prompt = "Set arguments",
-        }, function(input)
-          args = input
-        end)
-        if args == nil then
-          return
-        end
-
-        vim.cmd.CMakeLaunchArgs({ args })
-      end, { desc = "Set launch args" })
+      keymap.set("n", "<leader>csa", run_cmake_target_with_args, { desc = "Run CMake target with args" })
 
       require("cmake-tools").setup({
         cmake_executor = {
