@@ -48,7 +48,6 @@ return {
         "golines",
         "isort",
         "prettier",
-        "rustfmt",
         "shfmt",
         "stylua",
         "taplo",
