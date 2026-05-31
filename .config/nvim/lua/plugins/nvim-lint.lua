@@ -5,7 +5,7 @@ return {
       linters_by_ft = {
         bitbake = { "oelint-adv" },
         jinja = { "djlint" },
-        make = { "checkmake" },
+        make = { "checkmake", "mbake" },
         markdown = { "markdownlint" },
         proto = { "buf" },
         rst = { "rstcheck" },

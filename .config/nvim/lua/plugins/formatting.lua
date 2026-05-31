@@ -17,6 +17,7 @@ return {
         qml = { "qmlformat" },
         rust = { "rustfmt" },
         sh = { "shfmt" },
+        make = { "bake" },
         toml = { "taplo" },
         xml = { "xmlformatter" },
         yaml = { "yamlfmt" },
