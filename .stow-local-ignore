@@ -3,4 +3,5 @@
 env.sh
 setup
 intellij
-
+docker
+monkeytype.json
