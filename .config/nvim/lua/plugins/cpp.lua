@@ -7,7 +7,7 @@ return {
     },
     cond = function()
       local cwd = vim.loop.cwd()
-      return vim.loop.fs_stat(cwd .. "/CMakeLists.txt") ~= nil
+      return cwd and vim.loop.fs_stat(cwd .. "/CMakeLists.txt") ~= nil
     end,
     config = function()
       local function run_cmake_target_with_args()
