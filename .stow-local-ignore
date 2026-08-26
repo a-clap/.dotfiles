@@ -1,4 +1,5 @@
 \.gitignore
+\.dockerignore
 \.git
 env.sh
 setup
