@@ -1,4 +1,4 @@
-line_words_max = 200
+line_max_words = 120
 
 [format]
-indent_size = 4
+indent_size = 2
