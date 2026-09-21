@@ -1,0 +1,107 @@
+#pragma once
+
+#include <algorithm>
+#include <array>
+#include <cstdint>
+#include <optional>
+#include <string>
+#include <utility>
+
+#include <fmt/base.h>
+#include <fmt/core.h>
+
+namespace {{namespace}} {
+
+class invalid_range_t : public std::runtime_error {
+
+public:
+    template <typename T>
+    invalid_range_t(std::string_view message, T value)
+        : std::runtime_error(fmt::format("invalid: {}: {}", message, value)) {
+    }
+};
+
+template<typename T>
+struct range_t {
+    T min;
+    T max;
+    T step;
+      
+    [[nodiscard]] constexpr bool is_valid(T const& value) const {
+        if (std::cmp_less(value, min) or std::cmp_greater(value, max)) {
+            return false;
+        }
+        return (value - min) % step == 0;
+    }
+};
+
+template<typename T, std::size_t N>
+constexpr bool is_valid(std::array<range_t<T>, N> const& limits, T value) {
+    return std::ranges::all_of(limits, [value](range_t<T> const& range) -> bool {
+      return range.is_valid(value);
+    });
+}
+
+{% for range in ranges %}
+static constexpr std::array RANGE_LIMITS_{{range.name}} {
+{% for limit in range.limits %}
+    range_t<{{range.type}}> {{ "{" }} .min = {{ limit.min}}, .max = {{limit.max}}, .step = {{limit.step}} {{ "}" }},
+{% endfor %}
+
+};
+{% endfor %}
+
+{% for range in ranges %}
+
+class {{range.fullname}} {
+    {{range.type}} value_{};
+
+    {{range.fullname}}() = default;
+
+public:
+    explicit {{range.fullname}}({{range.type}} value) : value_(value) {
+        if (not is_valid(RANGE_LIMITS_{{range.name}}, value_)) {
+            throw invalid_range_t("{{range.fullname}}", value_);
+        }
+    }
+
+    {{range.fullname}}({{range.fullname}} const&) = default;
+    {{range.fullname}}({{range.fullname}}&&) = default;
+    {{range.fullname}}& operator=({{range.fullname}} const&) = default;
+    {{range.fullname}}& operator=({{range.fullname}} &&) = default;
+
+
+    static std::optional<{{range.fullname}}> make({{range.type}} value) {
+        if (not is_valid(RANGE_LIMITS_{{range.name}}, value)) {
+            return std::nullopt;
+        }
+
+        {{range.fullname}} range;
+        range.value_ = value;
+
+        return range;
+    }
+
+    [[nodiscard]] constexpr {{range.type}} value() const {
+        return value_;
+    }
+};
+
+static inline {{range.type}} format_as({{range.fullname}} range) {
+    return range.value();
+}
+
+{% endfor %}
+
+}
+
+namespace fmt {
+
+template<typename T>
+struct formatter<{{namespace}}::range_t<T>> : formatter<std::string> {
+    format_context::iterator format({{namespace}}::range_t<T> const& range, format_context& ctx) const {
+        return fmt::format_to(ctx.out(), "min = {}, max = {}, step = {}", range.min, range.max, range.step);
+    }
+};
+
+}

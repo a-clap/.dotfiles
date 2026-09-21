@@ -1,0 +1,110 @@
+#pragma once
+
+#include <cstdint>
+#include <optional>
+#include <string>
+#include <fmt/core.h>
+#include <vector>
+#include <string_view>
+#include <string>
+
+#include <fmt/base.h>
+#include <fmt/core.h>
+#include <fmt/format.h>
+#include <fmt/ranges.h>
+
+{% if carray(dataset, "enums") %}
+#include "enums.hpp"
+{% endif %}
+{% if carray(dataset, "ranges") %}
+#include "ranges.hpp"
+{% endif %}
+{% if dataset.readable %}
+#include "parser.hpp"
+{% endif %}
+
+namespace {{namespace}} {
+
+struct {{dataset.name}}Fields {
+{% for field in carray(dataset, "fields") %}
+    {% if cexists(field, "value") %}
+    std::optional<{{ kupka_type(field.kupka_type)}}> {{field.name}} = "{{field.value}}";
+    {% else %}
+    std::optional<{{ kupka_type(field.kupka_type)}}> {{field.name}};
+    {% endif %}
+{% endfor %}
+
+};
+
+struct {{ dataset.name }} {
+
+{% if dataset.readable %}
+    {{ make_readable_command(filter(dataset.fields, "rangeable"), "get", dataset.readAction) }}
+    
+    static std::vector<{{dataset.name}}Fields> parse_ami(std::vector<std::string_view> const& response) {
+        auto const list_key_values = {{ami_parser(dataset.read_type)}}(response);
+
+        std::vector<{{dataset.name}}Fields> fields;
+        fields.reserve(list_key_values.size());
+
+        for(auto const& key_values: list_key_values) {
+            fields.emplace_back(
+            {% for field in carray(dataset, "fields") %}
+              parse_key_value<{{kupka_type(field.kupka_type)}}>(key_values, "{{field.name}}", "{{dataset.name}}: {{field.name}}") {%- if not loop.is_last -%},{% endif %}
+            {% endfor %}
+            );
+        }
+
+
+        return fields;
+    }
+
+{% endif %}
+
+{% if dataset.writable %}
+    {{ make_writable_command(filter(dataset.fields, "writable"), "set", dataset.writeAction) }}
+{% endif %}
+
+{% if dataset.creatable %}
+    {{ make_writable_command(filter(dataset.fields, "writable"), "add", dataset.createAction) }}
+{% endif %}
+
+{% if dataset.deletable %}
+    {{ make_writable_command(filter(dataset.fields, "writable"), "delete", dataset.deleteAction) }}
+{% endif %}
+
+};
+
+}
+
+template <>
+struct fmt::formatter<{{namespace}}::{{dataset.name}}Fields> {
+    constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
+        auto const* it = ctx.begin();
+        auto const* end = ctx.end();
+
+        if (it != end && *it != '}') {
+            throw format_error("invalid format specifier for {{namespace}}::{{dataset.name}}");
+        }
+        return it;
+    }
+
+    format_context::iterator format({{namespace}}::{{dataset.name}}Fields const& fields, format_context& ctx) const {
+        std::string out;
+        out.reserve(static_cast<std::size_t>({{length(carray(dataset, "fields"))}} * 6));
+
+        {% for field in carray(dataset, "fields") %}
+        if (fields.{{field.name}}.has_value()) {
+            out += fmt::format("{{field.key}}: {{fmt(field.kupka_type)}}, ", *fields.{{field.name}});
+        }
+        {% endfor %}
+
+        if (not out.empty()) {
+            out.pop_back();
+            out.pop_back();
+        }
+
+        return fmt::format_to(ctx.out(), "{{dataset.name}}: {}", out);
+    }
+
+};

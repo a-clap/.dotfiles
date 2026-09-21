@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.28)
+
+project(
+  {{namespace}}
+  VERSION
+  0.1.0
+)
+
+find_package(fmt 12.2 REQUIRED)
+
+add_library({{namespace}}_lib INTERFACE)
+add_library({{namespace}}::{{namespace}} ALIAS {{namespace}}_lib)
+
+target_include_directories({{namespace}}_lib
+    INTERFACE
+    ${CMAKE_CURRENT_LIST_DIR}/include
+)
+
+target_link_libraries({{namespace}}_lib
+    INTERFACE
+    fmt::fmt
+)

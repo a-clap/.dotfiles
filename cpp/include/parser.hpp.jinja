@@ -1,0 +1,46 @@
+#pragma once
+
+#include <optional>
+#include <stdexcept>
+#include <string_view>
+#include <unordered_map>
+#include <vector>
+
+#include <fmt/format.h>
+
+#include "{{namespace}}/strconv.hpp"
+
+namespace {{namespace}} {
+
+using key_values_t = std::unordered_map<std::string_view, std::string_view>;
+
+template<typename Value> 
+std::optional<Value> parse_key_value(key_values_t const& key_values, std::string_view key, std::string_view error_ctx) {
+    if (auto maybe = key_values.find(key); maybe != std::end(key_values)) {
+        return parse<Value>(maybe->second).or_else([key, error_ctx]() {
+            throw std::runtime_error {fmt::format("{}: {}", error_ctx, key)};
+        });
+    }
+    return {};
+}
+
+static inline std::string_view get_value(key_values_t const& key_values, std::string_view key) {
+    if (auto maybe = key_values.find(key); maybe != std::end(key_values)) {
+        return maybe->second;
+    }
+    return {};
+}
+
+static inline std::vector<key_values_t> parse_single_ami(std::vector<std::string_view> const& response) {
+  return {};
+}
+
+static inline std::vector<key_values_t> parse_records_ami(std::vector<std::string_view> const& response) {
+  return {};
+}
+
+static inline std::vector<key_values_t> parse_table_ami(std::vector<std::string_view> const& response) {
+  return {};
+}
+
+} // namespace {{namespace}}

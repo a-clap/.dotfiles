@@ -1,0 +1,77 @@
+#pragma once
+
+#include <algorithm>
+#include <array>
+#include <cstdint>
+#include <optional>
+#include <ranges>
+#include <string_view>
+#include <utility>
+
+#include <fmt/base.h>
+#include <fmt/core.h>
+
+namespace {{namespace}} {
+
+namespace impl {
+    static constexpr bool case_insensitive_lhs(std::string_view lhs, std::string_view always_lower) {
+        static constexpr auto kCmp = [](char first, char lower) {
+            return std::tolower(first) == lower;
+        };
+
+        return std::ranges::equal(lhs, always_lower, kCmp);
+    }
+}  // namespace impl
+
+{% for enum in enums %}
+
+enum class {{enum.fullname}}: std::uint8_t {
+{% for value in enum.values %}
+    {{enum.prefix}}{{ escape_variable(value)}},
+{% endfor %}
+};
+
+static constexpr bool is_valid({{enum.fullname}} value) {
+    static constexpr std::array kValues {
+{% for value in enum.values %}
+        {{enum.fullname}}::{{enum.prefix}}{{ escape_variable(value)}},
+{% endfor %}
+  };
+
+    return std::ranges::find(kValues, value) != std::ranges::end(kValues);
+}
+
+static constexpr const char* to_string({{enum.fullname}} value) {
+    switch(value) {
+{% for value in enum.values %}
+        case {{enum.fullname}}::{{enum.prefix}}{{ escape_variable(value)}}:
+          return "{{ value }}";
+{% endfor %}
+    }
+
+    std::unreachable();
+}
+
+static constexpr std::optional<{{enum.fullname}}> {{enum.fullname}}_from_string(std::string_view from) {
+{% for value in enum.values %}
+    if (impl::case_insensitive_lhs(from, "{{value}}")) {
+        return {{enum.fullname}}::{{enum.prefix}}{{ escape_variable(value)}};
+    }
+{% endfor %}
+
+    return std::nullopt;
+}
+{% endfor %}
+}
+
+namespace fmt {
+
+{% for enum in enums %}
+template<>
+struct formatter<{{namespace}}::{{enum.fullname}}> : formatter<std::string_view> {
+    format_context::iterator format({{namespace}}::{{enum.fullname}} value, format_context& ctx) const {
+        return formatter<std::string_view>::format({{namespace}}::to_string(value), ctx);
+    }
+};
+{% endfor %}
+}
