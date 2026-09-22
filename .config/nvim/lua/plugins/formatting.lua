@@ -6,7 +6,6 @@ return {
         asm = { "asmfmt" },
         c = { "clang-format" },
         cpp = { "clang-format" },
-        cmake = { "gersemi" },
         go = { "gofumpt", "golines", "goimports-reviser" },
         html = { "prettier" },
         javascript = { "prettier" },
