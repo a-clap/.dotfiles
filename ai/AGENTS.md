@@ -107,6 +107,33 @@ Before adding one, consider:
 
 Prefer standard library and existing project facilities when they are sufficient.
 
+## External documentation and Context7
+
+Use Context7 for current documentation when working with third-party libraries, frameworks, SDKs, tools, or APIs.
+
+Prefer Context7 over assumptions based on model knowledge when behavior may depend on the installed or requested version.
+
+Use Context7 especially when:
+
+- adding or upgrading a dependency
+- using an unfamiliar or rapidly changing API
+- implementing version-sensitive behavior
+- configuring frameworks, SDKs, build tools, or integrations
+- an API, option, default, or recommended pattern may have changed
+- project-local evidence is insufficient to determine correct usage
+
+When using Context7:
+
+- identify the relevant library and version when practical
+- retrieve only the documentation needed for the task
+- prefer primary or official documentation surfaced by Context7
+- reconcile documentation with the versions and constraints present in the repository
+- do not override established project conventions without a clear reason
+
+Do not query Context7 unnecessarily for repository-local code, language standard-library behavior, or trivial changes that do not depend on external documentation.
+
+If Context7 is unavailable or does not cover the dependency, use the best available primary documentation and clearly state any remaining uncertainty.
+
 ## Performance
 
 Do not optimize blindly.
