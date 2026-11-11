@@ -1,46 +1,177 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Run as the workspace user (not with sudo); system packages use sudo if needed.
+set -euo pipefail
 
-set -e
+repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+config_dir=${XDG_CONFIG_HOME:-$HOME/.config}
 
-export DEBIAN_FRONTEND=noninteractive
-echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+if [[ ${1:-} == --help ]]; then
+  echo 'Usage: ./setup [--skip-nvim]'
+  echo 'Install container development tools and link dotfiles for the current user.'
+  echo '--skip-nvim: defer Neovim plugin and Mason downloads until first use.'
+  exit 0
+fi
+if (($# > 1)) || [[ ${1:-} != '' && ${1:-} != --skip-nvim ]]; then
+  echo 'Usage: ./setup [--skip-nvim]' >&2
+  exit 2
+fi
 
-apt-get update && apt-get install --no-install-recommends -y \
-    build-essential \
-    fzf \
-    luarocks \
-    python3 \
-    python3-pip \
-    python3-venv \
-    ripgrep \
-    stow \
-    tmux
+sudo_cmd=()
+if ((EUID != 0)); then
+  if ! command -v sudo >/dev/null || ! sudo -n true; then
+    echo 'Setup needs root or passwordless sudo to install system packages.' >&2
+    exit 1
+  fi
+  sudo_cmd=(sudo -n)
+fi
 
-# Rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- --quiet -y --profile default
-echo "Rust installed!"
+work_dir=$(mktemp -d)
+trap 'rm -rf -- "$work_dir"' EXIT
 
-# Golang
-curl -fsSL https://go.dev/dl/go1.23.2.linux-amd64.tar.gz -o go1.23.2.linux-amd64.tar.gz
-chmod a+x go1.23.2.linux-amd64.tar.gz
-rm -rf /usr/local/go && tar -C /usr/local -xzf go1.23.2.linux-amd64.tar.gz
-echo "Golang installed!"
+# Match the development image, with Debian/Ubuntu support for standard DevPods.
+if command -v apt-get >/dev/null; then
+  "${sudo_cmd[@]}" apt-get update
+  "${sudo_cmd[@]}" env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    build-essential ca-certificates clang clangd clang-format clang-tidy cmake \
+    curl direnv fd-find fzf gdb git lldb luarocks mold ninja-build \
+    python3 python3-pip python3-venv ripgrep ruby ruby-dev tar tmux unzip wget xz-utils zsh
+  # Distribution Neovim/Node packages can be too old for LazyVim and Mason.
+  curl -fsSL https://deb.nodesource.com/setup_22.x -o "$work_dir/nodesource.sh"
+  "${sudo_cmd[@]}" bash "$work_dir/nodesource.sh"
+  "${sudo_cmd[@]}" env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends nodejs
+  case $(uname -m) in
+  x86_64) arch=x86_64 ;;
+  aarch64 | arm64) arch=arm64 ;;
+  *)
+    echo 'Unsupported architecture for the Neovim binary.' >&2
+    exit 1
+    ;;
+  esac
+  curl -fsSL "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-$arch.tar.gz" \
+    -o "$work_dir/nvim.tar.gz"
+  tar -xzf "$work_dir/nvim.tar.gz" -C "$work_dir"
+  mkdir -p "$HOME/.local/opt" "$HOME/.local/bin"
+  # Only replace the installation managed by this script.
+  rm -rf -- "$HOME/.local/opt/nvim"
+  mv "$work_dir/nvim-linux-$arch" "$HOME/.local/opt/nvim"
+  ln -sfn "$HOME/.local/opt/nvim/bin/nvim" "$HOME/.local/bin/nvim"
+  ln -sfn "$(command -v fdfind)" "$HOME/.local/bin/fd"
+  # Use a current Go toolchain: older distro Go cannot build Mason's tools.
+  case $arch in
+  x86_64) go_arch=amd64 ;;
+  arm64) go_arch=arm64 ;;
+  esac
+  curl -fsSL 'https://go.dev/VERSION?m=text' -o "$work_dir/go-version"
+  read -r go_version <"$work_dir/go-version"
+  if [[ ! $go_version =~ ^go[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    echo 'Could not determine the current stable Go version.' >&2
+    exit 1
+  fi
+  curl -fsSL "https://go.dev/dl/$go_version.linux-$go_arch.tar.gz" -o "$work_dir/go.tar.gz"
+  tar -xzf "$work_dir/go.tar.gz" -C "$work_dir"
+  rm -rf -- "$HOME/.local/opt/go"
+  mv "$work_dir/go" "$HOME/.local/opt/go"
+  for tool in go gofmt; do
+    ln -sfn "$HOME/.local/opt/go/bin/$tool" "$HOME/.local/bin/$tool"
+  done
+elif command -v pacman >/dev/null; then
+  "${sudo_cmd[@]}" pacman -Syu --noconfirm --needed \
+    base-devel ca-certificates clang cmake curl direnv fd fzf gdb git go lldb \
+    luarocks mold neovim ninja npm python python-pip ripgrep ruby rubygems rust \
+    tmux unzip wget zsh
+elif command -v apk >/dev/null; then
+  "${sudo_cmd[@]}" apk add --no-cache \
+    bash build-base ca-certificates clang clang-extra-tools cmake curl direnv fd \
+    fzf gdb git go linux-headers lldb luarocks mold neovim ninja npm python3 \
+    py3-pip ripgrep ruby ruby-dev cargo rust tmux unzip wget zsh
+else
+  echo 'Supported containers: Debian/Ubuntu, Arch Linux, and Alpine Linux.' >&2
+  exit 1
+fi
 
-/usr/local/go/bin/go install github.com/jesseduffield/lazygit@latest
+mkdir -p "$HOME/.local/bin"
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/bin:$PATH"
+export XDG_CONFIG_HOME="$config_dir"
 
-# Node
-curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh
-bash nodesource_setup.sh
-apt-get install -y nodejs
+clone_if_missing() {
+  local url=$1 destination=$2
+  if [[ ! -e $destination ]]; then
+    git clone --depth=1 "$url" "$destination"
+  elif [[ ! -d $destination/.git ]]; then
+    echo "Expected a Git checkout at $destination; refusing to overwrite it." >&2
+    return 1
+  fi
+}
 
-# Set up pure prompt
-mkdir -p "$HOME/.zsh"
-git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
+if ! command -v cargo >/dev/null; then
+  curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs -o "$work_dir/rustup.sh"
+  bash "$work_dir/rustup.sh" -y --profile default --no-modify-path
+fi
+if ! command -v lazygit >/dev/null; then
+  go install github.com/jesseduffield/lazygit@latest
+fi
+if ! command -v uv >/dev/null; then
+  curl -fsSL https://astral.sh/uv/install.sh -o "$work_dir/uv.sh"
+  UV_INSTALL_DIR="$HOME/.local/bin" UV_NO_MODIFY_PATH=1 sh "$work_dir/uv.sh"
+fi
 
-# Environment
-cp env.sh /etc/profile.d/env.sh && chmod a+x /etc/profile.d/env.sh
+# Older distribution fzf packages lack the --zsh integration used by .zshrc.
+if ! fzf --zsh >/dev/null 2>&1; then
+  clone_if_missing https://github.com/junegunn/fzf.git "$HOME/.fzf"
+  "$HOME/.fzf/install" --bin
+  ln -sfn "$HOME/.fzf/bin/fzf" "$HOME/.local/bin/fzf"
+fi
 
-# Create symlinks
-stow --target="$HOME" .
+clone_if_missing https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
+custom_dir=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}
+clone_if_missing https://github.com/zdharma-continuum/fast-syntax-highlighting.git "$custom_dir/plugins/fast-syntax-highlighting"
+clone_if_missing https://github.com/romkatv/powerlevel10k.git "$custom_dir/themes/powerlevel10k"
+clone_if_missing https://github.com/jeffreytse/zsh-vi-mode.git "$custom_dir/plugins/zsh-vi-mode"
+clone_if_missing https://github.com/zsh-users/zsh-autosuggestions.git "$custom_dir/plugins/zsh-autosuggestions"
+clone_if_missing https://github.com/tmux-plugins/tpm.git "$HOME/.tmux/plugins/tpm"
 
-exit 0
+# Link only container configuration. Keep existing files in a unique backup tree.
+backup_dir=''
+link_config() {
+  local source=$1 target=$2 relative=$3
+  if [[ -L $target && $(readlink -- "$target") == "$source" ]]; then
+    return
+  fi
+  if [[ -e $target || -L $target ]]; then
+    if [[ -z $backup_dir ]]; then
+      backup_dir=$(mktemp -d "$HOME/.dotfiles-backup.XXXXXX")
+      echo "Existing configuration backed up to $backup_dir"
+    fi
+    mkdir -p -- "$(dirname -- "$backup_dir/$relative")"
+    mv -- "$target" "$backup_dir/$relative"
+  fi
+  mkdir -p -- "$(dirname -- "$target")"
+  ln -s -- "$source" "$target"
+}
+for name in nvim gdb neocmakelsp ruff; do
+  link_config "$repo_dir/.config/$name" "$config_dir/$name" ".config/$name"
+done
+for name in .zshenv .zshrc .p10k.zsh .tmux.conf .ideavimrc; do
+  link_config "$repo_dir/$name" "$HOME/$name" "$name"
+done
+
+link_config "$repo_dir/.config/zsh/.zshenv" "$config_dir/zsh/.zshenv" '.config/zsh/.zshenv'
+
+# .zshenv redirects Zsh to XDG_CONFIG_HOME/zsh, so .zshrc must be there too.
+link_config "$repo_dir/.zshrc" "$config_dir/zsh/.zshrc" '.config/zsh/.zshrc'
+# Load the user-local Neovim/fzf/uv binaries in new shells.
+# Keep these variables literal for evaluation by future shells.
+# shellcheck disable=SC2016
+if [[ ! -e $HOME/.zshrc.local && ! -L $HOME/.zshrc.local ]]; then
+  printf '%s\n' 'export PATH="$HOME/.local/bin:$PATH"' >"$HOME/.zshrc.local"
+elif ! rg -qF 'export PATH="$HOME/.local/bin:$PATH"' "$HOME/.zshrc.local"; then
+  printf '\n%s\n' 'export PATH="$HOME/.local/bin:$PATH"' >>"$HOME/.zshrc.local"
+fi
+
+if [[ ${1:-} != --skip-nvim ]]; then
+  nvim --headless '+Lazy! sync' '+qa'
+  DOTFILES_MASON_BOOTSTRAP="$repo_dir/docker/bootstrap-mason.lua" \
+    nvim --headless '+lua dofile(vim.env.DOTFILES_MASON_BOOTSTRAP)'
+fi
+
+echo 'Setup complete. Start your configured shell with: exec zsh'
