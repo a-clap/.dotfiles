@@ -11,6 +11,15 @@ return {
               },
             })
           end,
+          claude_code = function()
+            return require("codecompanion.adapters").extend("claude_code", {
+              env = {
+                ANTHROPIC_BASE_URL = "https://openrouter.ai/api",
+                ANTHROPIC_API_KEY = "OPENROUTER_API_KEY",
+                CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY = "1",
+              },
+            })
+          end,
         },
       },
 
@@ -24,7 +33,7 @@ return {
   {
     "mason-org/mason.nvim",
     opts = {
-      ensure_installed = { "codex-acp" },
+      ensure_installed = { "codex-acp", "claude-agent-acp" },
     },
   },
 }
