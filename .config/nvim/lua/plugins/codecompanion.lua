@@ -33,6 +33,15 @@ local specs = {
         desc = "Add selection to AI chat",
       },
     },
+    opts = {
+      opts = {
+        per_project_config = {
+          files = {
+            ".codecompanion.lua",
+          },
+        },
+      },
+    },
   },
 }
 
