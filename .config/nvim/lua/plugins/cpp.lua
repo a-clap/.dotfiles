@@ -43,6 +43,18 @@ return {
       keymap.set("n", "<leader>csl", "<cmd>CMakeSelectLaunchTarget<CR>", { desc = "Select launch target" })
       keymap.set("n", "<leader>csa", run_cmake_target_with_args, { desc = "Run CMake target with args" })
 
+      -- Fix: utils.softlink fails with EEXIST when the existing symlink
+      -- points to a different build dir (e.g. after switching preset).
+      local utils = require("cmake-tools.utils")
+      local orig_softlink = utils.softlink
+      utils.softlink = function(src, target)
+        local stat = vim.uv.fs_lstat(target)
+        if stat and stat.type == "link" and vim.uv.fs_readlink(target) ~= src then
+          vim.uv.fs_unlink(target)
+        end
+        orig_softlink(src, target)
+      end
+
       require("cmake-tools").setup({
         cmake_executor = {
           name = "quickfix",
