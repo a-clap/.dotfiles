@@ -4,13 +4,31 @@ return {
     opts = {
       adapters = {
         acp = {
-          codex = function()
+          codex_chatgpt = function()
             return require("codecompanion.adapters").extend("codex", {
+              name = "codex_chatgpt",
+              formatted_name = "Codex via ChatGPT",
               defaults = {
                 auth_method = "chat-gpt",
               },
             })
           end,
+          codex_openrouter = function()
+            return require("codecompanion.adapters").extend("codex", {
+              name = "codex_openrouter",
+              formatted_name = "Codex via OpenRouter",
+
+              commands = {
+                default = {
+                  "codex-acp",
+                },
+              },
+              env = {
+                MODEL_PROVIDER = "openrouter",
+              },
+            })
+          end,
+
           claude_code = function()
             return require("codecompanion.adapters").extend("claude_code", {
               env = {
@@ -25,7 +43,7 @@ return {
 
       interactions = {
         chat = {
-          adapter = "codex",
+          adapter = "codex_openrouter",
         },
       },
     },
